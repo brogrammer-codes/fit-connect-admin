@@ -35,7 +35,7 @@ const SignUp: NextPage = () => {
               </div>
             </div>
             <span className="text-lg">You want to look for coaches or trainers. You want to train people in specific disciplines</span>
-            <Button buttonText="Sign Up"/>
+            <Button buttonText="Sign Up" />
           </div>
         </div>
       </main>
