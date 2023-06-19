@@ -2,7 +2,6 @@ import Link from 'next/link'
 import React from 'react'
 import { Title } from './Title'
 
-type Props = {}
 const style = {
   header: 'fixed inset-0 z-50 flex h-14 bg-[#343434]',
   wrapper: 'flex flex-1 items-center space-x-4 border-b border-[#343536] px-5',
@@ -14,7 +13,7 @@ const style = {
   headerLink: 'text-slate-50 bg-transparent font-bold text-lg px-4 py-1.5 text-center mr-2 my-2 ',
 }
 
-const Header = (props: Props) => {
+const Header = () => {
   return (
     <header className={style.header}>
       <div className={style.wrapper}>
