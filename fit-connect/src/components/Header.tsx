@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { Title } from './Title'
 
 type Props = {}
 const style = {
@@ -20,13 +21,13 @@ const Header = (props: Props) => {
         <div className={style.leftHeader}>
           <div>Logo </div>
           <h1 className={style.headerTitle}>
-            <span className="text-slate-50 font-extrabold">Fit</span> Connect
+            <Title />
           </h1>
         </div>
         <div className={style.rightHeader}>
           <Link href={'/about'} className={style.headerLink}>About</Link>
           <Link href={'/log-in'} className={style.headerLink}>Log In</Link>
-          <Link href={'/'} className={style.accountButton}>Sign Up</Link>
+          <Link href={'/sign-up'} className={style.accountButton}>Sign Up</Link>
         </div>
       </div>
     </header>
