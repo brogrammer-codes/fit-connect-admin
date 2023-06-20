@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Title } from "~/components/Title";
 import { api } from "~/utils/api";
 import { bench } from "assets";
-import { Button } from "~/components/atoms";
+import { Button, Pill } from "~/components/atoms";
 
 const style = {
   wrapper: `flex min-h-screen flex-col bg-[#6A6A6A] text-white pt-14`,
