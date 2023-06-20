@@ -6,7 +6,7 @@ import { bench } from "assets";
 
 const style = {
   wrapper: `flex min-h-screen flex-col bg-[#6A6A6A] text-white pt-14`,
-  main: `mx-auto flex w-full max-w-5xl flex-1 space-x-6 p-10 content-center`,
+  main: `mx-auto flex w-full max-w-screen-lg flex-1 space-x-6 p-10 content-center`,
   content: `w-full space-y-4 lg:w-2/3 place-content-center `,
   infoContainer: `hidden w-1/3 lg:block`,
 }
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
           </p>
         </div>
         <div className={style.infoContainer}>
-          <Image src={bench} width={330} height={675} alt="info image"/>
+          <Image src={bench} width={330} height={675} alt="info image" className="rounded"/>
         </div>
       </main>
     </div>

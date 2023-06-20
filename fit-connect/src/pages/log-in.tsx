@@ -3,7 +3,8 @@ import Image from "next/image";
 import { Title } from "~/components/Title";
 import { api } from "~/utils/api";
 import { bench } from "assets";
-import { Button } from "~/components/atoms";
+import { Button, Input } from "~/components/atoms";
+import { useRef } from "react";
 
 const style = {
   wrapper: `flex min-h-screen flex-col bg-[#6A6A6A] text-white pt-14`,
@@ -14,6 +15,8 @@ const style = {
 
 const LogIn: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const loginRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className={style.wrapper}>
@@ -25,11 +28,11 @@ const LogIn: NextPage = () => {
             <div className="flex flex-col w-1/2 space-y-3">
               <div>
                 <label htmlFor="username" className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Username</label>
-                <input type="text" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                <Input inputRef={loginRef} placeholder="Enter your username here" required type={'text'} id='username' />
               </div>
               <div>
                 <label htmlFor="password" className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Password</label>
-                <input type="text" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                <Input inputRef={passwordRef} placeholder="Enter your password here" required type="password" id='password'/>
               </div>
               <span className="text-[#6A6A6A] italic">Forgot Password?</span>
               <Button buttonText="Log In"/>
