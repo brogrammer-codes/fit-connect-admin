@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Title } from "~/components/Title";
 import { api } from "~/utils/api";
 import { bench } from "assets";
-import { Button, Pill } from "~/components/atoms";
+import { Button, Pill, Switch } from "~/components/atoms";
 
 const style = {
   wrapper: `flex min-h-screen flex-col bg-[#6A6A6A] text-white pt-14`,
@@ -35,6 +35,7 @@ const SignUp: NextPage = () => {
               </div>
             </div>
             <span className="text-lg">You want to look for coaches or trainers. You want to train people in specific disciplines</span>
+            <Switch label="Public Account?" value={true}/>
             <Button buttonText="Sign Up" />
           </div>
         </div>
