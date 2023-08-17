@@ -20,11 +20,13 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
+import { Trash } from "lucide-react";
+import { AlertModal } from "@/components/modals/alert-modal";
 
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(0),
-  email: z.string().min(0)
+  email: z.string().min(0),
 });
 
 type ClientFormValues = z.infer<typeof formSchema>;
@@ -57,10 +59,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
       setLoading(true);
 
       if (initialData) {
-        await axios.patch(
-          `/api/clients/${params.clientId}`,
-          data
-        );
+        await axios.patch(`/api/clients/${params.clientId}`, data);
         router.refresh();
       } else {
         const response = await axios.post("/api/clients", data);
@@ -78,14 +77,14 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardId}`
+        `/api/clients/${params.clientId}`
       );
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
-      toast.success("Billboard deleted.");
+      router.push('/clients');
+      toast.success("Client deleted.");
     } catch (error: any) {
       toast.error(
-        "Make sure you removed all categories using this billboard first."
+        "Could not delete client"
       );
     } finally {
       setLoading(false);
@@ -94,8 +93,24 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
   };
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onDelete}
+        loading={loading}
+      />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
+        {initialData && (
+          <Button
+            disabled={loading}
+            variant="destructive"
+            size="sm"
+            onClick={() => setOpen(true)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <Separator />
       <Form {...form}>

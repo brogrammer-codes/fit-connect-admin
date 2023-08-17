@@ -1,7 +1,47 @@
+import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
-import prismadb from "@/lib/prismadb";
+export async function DELETE(
+  req: Request,
+  { params }: { params: { clientId: string} }
+) {
+  const { clientId } = params
+
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 });
+    }
+
+    if (!clientId) {
+      return new NextResponse("Billboard id is required", { status: 400 });
+    }
+
+    const clientByUserId = await prismadb.client.findFirst({
+      where: {
+        id: clientId,
+        userId,
+      }
+    });
+
+    if (!clientByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 });
+    }
+
+    const billboard = await prismadb.client.delete({
+      where: {
+        id: clientId,
+      }
+    });
+
+    return NextResponse.json(billboard);
+  } catch (error) {
+    console.log('[BILLBOARD_DELETE]', error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+};
 
 export async function PATCH(
   req: Request,
