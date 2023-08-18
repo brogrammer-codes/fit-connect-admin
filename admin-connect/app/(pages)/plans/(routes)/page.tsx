@@ -1,0 +1,24 @@
+import prismadb from "@/lib/prismadb";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { format } from "date-fns";
+
+export default async function Clients() {
+  const { userId } = auth();
+  if (!userId) redirect("/");
+
+//   const clients = await prismadb.client.findMany({ where: { userId: userId } });
+//   const formattedClients: ClientColumn[] = clients.map((client) => ({
+//     id: client.id,
+//     name: client.name,
+//     createdAt: format(client.createdAt, "MMMM do, yyyy"),
+//     email: client.email,
+//   }));
+  return (
+    <div className="flex-col">
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        {/* <ClientDisplay clients={formattedClients} /> */}
+      </div>
+    </div>
+  );
+}

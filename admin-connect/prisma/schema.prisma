@@ -11,6 +11,21 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum PlanStatus {
+  DRAFT
+  ASSIGNED
+  COMPLETE
+}
+
+enum ActivityStatus {
+  DRAFT
+  IN_PLAN
+  ASSIGNED
+  COMPLETE
+  DISABLED
+}
+
+
 model Client {
   id          String   @id @default(uuid())
   name        String
@@ -19,4 +34,41 @@ model Client {
   email       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Activity {
+  id                String         @id @default(uuid())
+  name              String
+  userId            String
+  description       String
+  parentActivityId  String?
+  parentActivity    Activity?      @relation("ChildActivity", fields: [parentActivityId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  childActivityList Activity[]     @relation("ChildActivity")
+  note              String?
+  status            ActivityStatus @default(DRAFT)
+  videoUrl          String
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  Plan              Plan?          @relation(fields: [planId], references: [id])
+  planId            String?
+
+  @@index([parentActivityId])
+  @@index([userId])
+  @@index([planId])
+}
+
+model Plan {
+  id          String     @id @default(uuid())
+  name        String
+  userId      String
+  description String
+  note        String?
+  status      PlanStatus @default(DRAFT)
+  Activity    Activity[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId])
 }
