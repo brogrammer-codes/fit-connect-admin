@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Client } from "@prisma/client";
+import { DataTable } from "@/components/ui/data-table";
+import { ClientColumn, columns } from "./columns";
+import { Separator } from "@/components/ui/separator";
 
 interface ClientDisplayInterface {
-  clients: Client[];
+  clients: ClientColumn[];
 }
 
 export const ClientDisplay: React.FC<ClientDisplayInterface> = ({
@@ -27,11 +30,8 @@ export const ClientDisplay: React.FC<ClientDisplayInterface> = ({
           Add New
         </Button>
       </div>
-      <div className="flex items-center justify-between">
-        {
-          clients.length ? <div> Client Table</div> : <div> You do not have any clients right now, try making one! </div>
-        }
-      </div>
+      <Separator />
+      <DataTable columns={columns} data={clients} filterKey="name" />
     </div>
   );
 };
