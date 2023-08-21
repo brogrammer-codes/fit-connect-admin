@@ -1,6 +1,6 @@
 "use client";
 import { Heading } from "@/components/ui/heading";
-import { Activity, Plan } from "@prisma/client";
+import { Activity, Plan, PlanStatus } from "@prisma/client";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,12 +16,15 @@ import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Trash } from "lucide-react";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { ActivityTable } from "./activity-table/activity-table";
+import { columns } from "./activity-table/activity-column";
+import { StatusPill } from "@/components/status-pill";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -32,20 +35,47 @@ type PlanFormValues = z.infer<typeof formSchema>;
 
 interface PlanFormProps {
   initialData: Plan | null;
+  initialActivityList: Activity[] | null;
 }
 
-export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
+export const PlanForm: React.FC<PlanFormProps> = ({
+  initialData,
+  initialActivityList,
+}) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activityList, setActivityList] = useState<Activity[] | []>([])
-  const title = initialData ? "Edit plan" : "Create plan";
-  const description = initialData ? "Edit a plan." : "Add a new plan";
-  const toastMessage = initialData ? "Plan updated." : "Plan created.";
-  const action = initialData ? "Save changes" : "Create";
+  const [activityList, setActivityList] = useState<Activity[] | []>([]);
 
+  const messageCopy = useMemo(
+    () => ({
+      title: "Create plan",
+      description: "Add a new plan",
+      toastMessage: "Plan created.",
+      action: "Create",
+    }),
+    []
+  );
+    const addActivity = () => {
+      if(initialData) {
+        let newActivity: Activity = {
+          id: "",
+          name: "",
+          userId: "",
+          description: "",
+          parentActivityId: null,
+          note: null,
+          status: "DRAFT",
+          videoUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          planId: initialData?.id
+        }
+        setActivityList([...activityList, newActivity])
+      }
+    }
   const form = useForm<PlanFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
@@ -53,8 +83,22 @@ export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
       description: "",
     },
   });
-  const onSubmit = async (data: PlanFormValues) => {
+  useEffect(() => {
+    if (initialData) {
+      if (initialData.status === PlanStatus.DRAFT) {
+        messageCopy.title = "Edit plan";
+        messageCopy.description = "Edit your plan";
+        messageCopy.toastMessage = "Plan Updated";
+        messageCopy.action = "Save Changes";
+      }
+    }
+  }, [initialData, messageCopy]);
 
+  useEffect(() => {
+    if (initialActivityList) setActivityList([...initialActivityList]);
+  }, [initialActivityList]);
+
+  const onSubmit = async (data: PlanFormValues) => {
     try {
       setLoading(true);
 
@@ -65,7 +109,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
         const response = await axios.post("/api/plans", data);
         router.push(`/plans/${response.data.id}`);
       }
-      toast.success(toastMessage);
+      toast.success(messageCopy.toastMessage);
     } catch (error: any) {
       toast.error("Something went wrong.");
     } finally {
@@ -97,8 +141,8 @@ export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
       />
       <div className="flex items-center justify-between">
         <div className="flex flex-row space-x-4">
-          <Heading title={title} description={description} />
-          {initialData && <span>{initialData?.status}</span>}
+          <Heading title={messageCopy.title} description={messageCopy.description} />
+          {initialData && <StatusPill status={initialData.status}/>}
         </div>
         <div className="flex flex-row space-x-3">
           {initialData && (
@@ -120,7 +164,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
           className="space-y-8 w-full"
         >
           <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+            {messageCopy.action}
           </Button>
           <div className="md:grid md:grid-cols-2 gap-8">
             <FormField
@@ -160,7 +204,13 @@ export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
           </div>
         </form>
       </Form>
-      <Separator />
+      {initialData && (
+        <>
+          <Separator />
+          <Button variant={'secondary'} onClick={addActivity}>Add Activity</Button>
+          <ActivityTable data={activityList} columns={columns} />
+        </>
+      )}
     </>
   );
 };

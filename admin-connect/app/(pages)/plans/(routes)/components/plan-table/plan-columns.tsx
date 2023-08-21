@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CellAction } from "./cell-action";
+import { CellAction } from "./plan-cell-action";
 import { Activity, PlanStatus } from "@prisma/client";
 import { StatusPill } from "@/components/status-pill";
 import { ArrowUpDown } from "lucide-react"

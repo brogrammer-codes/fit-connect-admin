@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { PlanColumn } from "./columns";
+import { PlanColumn } from "./plan-columns";
 
 interface CellActionProps {
   data: PlanColumn;

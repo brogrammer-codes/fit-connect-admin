@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Activity, Plan } from "@prisma/client";
 import { DataTable } from "@/components/ui/data-table";
-import { PlanColumn, columns } from "./columns";
+import { PlanColumn, columns } from "./plan-table/plan-columns";
 import { Separator } from "@/components/ui/separator";
 
 interface PlanDisplayInterface {
