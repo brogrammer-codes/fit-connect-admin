@@ -13,8 +13,8 @@ export async function POST(req: Request) {
     if (!name) {
       return new NextResponse("Activity name is required", { status: 400 })
     }
-    const store = await prismadb.activity.create({data: {name, userId, description, videoUrl}})
-    return NextResponse.json(store)
+    const activity = await prismadb.activity.create({data: {name, userId, description, videoUrl}})
+    return NextResponse.json(activity)
   } catch (error) {
     console.log('[ACTIVITY_POST]', error)
     return new NextResponse("Internal Error", { status: 500 })

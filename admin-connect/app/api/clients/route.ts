@@ -13,8 +13,8 @@ export async function POST(req: Request) {
     if (!name) {
       return new NextResponse("Client name is required", { status: 400 })
     }
-    const store = await prismadb.client.create({data: {name, userId, description, email}})
-    return NextResponse.json(store)
+    const client = await prismadb.client.create({data: {name, userId, description, email}})
+    return NextResponse.json(client)
   } catch (error) {
     console.log('[CLIENTS_POST]', error)
     return new NextResponse("Internal Error", { status: 500 })

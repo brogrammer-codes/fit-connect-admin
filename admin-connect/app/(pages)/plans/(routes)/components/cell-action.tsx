@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { ClientColumn } from "./columns";
+import { PlanColumn } from "./columns";
 
 interface CellActionProps {
-  data: ClientColumn;
+  data: PlanColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -31,7 +31,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/clients/${params.clientId}`);
+      await axios.delete(`/api/plans/${params.planId}`);
       toast.success("Client deleted.");
       router.refresh();
     } catch (error) {
@@ -42,10 +42,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     }
   };
 
-  const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id);
-    toast.success("Client Email copied to clipboard.");
-  };
 
   return (
     <>
@@ -64,12 +60,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.email)}>
-            <Copy className="mr-2 h-4 w-4" /> Copy Email
-          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/clients/${data.id}`)
+              router.push(`/plans/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" /> Update

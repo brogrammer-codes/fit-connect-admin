@@ -3,17 +3,17 @@ import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Client } from "@prisma/client";
+import { Activity, Plan } from "@prisma/client";
 import { DataTable } from "@/components/ui/data-table";
-import { ClientColumn, columns } from "./columns";
+import { PlanColumn, columns } from "./columns";
 import { Separator } from "@/components/ui/separator";
 
-interface ClientDisplayInterface {
-  clients: ClientColumn[];
+interface PlanDisplayInterface {
+  plans: PlanColumn[];
 }
 
-export const ClientDisplay: React.FC<ClientDisplayInterface> = ({
-  clients,
+export const PlanDisplay: React.FC<PlanDisplayInterface> = ({
+  plans,
 }) => {
   const router = useRouter();
 
@@ -21,17 +21,17 @@ export const ClientDisplay: React.FC<ClientDisplayInterface> = ({
     <div>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Clients (${clients.length})`}
+          title={`Plans (${plans.length})`}
           description="Your client list, add a new one or edit existing ones here."
         />
 
-        <Button onClick={() => router.push(`/clients/new`)}>
+        <Button onClick={() => router.push(`/plans/new`)}>
           <Plus className="mr-2 h-4 w-4" />
           Add New
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={clients} filterKey="name" />
+      <DataTable columns={columns} data={plans} filterKey="name" />
     </div>
   );
 };

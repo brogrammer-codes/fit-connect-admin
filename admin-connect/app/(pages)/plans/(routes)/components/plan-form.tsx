@@ -1,6 +1,6 @@
 "use client";
 import { Heading } from "@/components/ui/heading";
-import { Client } from "@prisma/client";
+import { Activity, Plan } from "@prisma/client";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,44 +26,44 @@ import { AlertModal } from "@/components/modals/alert-modal";
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(0),
-  email: z.string().min(0),
 });
 
-type ClientFormValues = z.infer<typeof formSchema>;
+type PlanFormValues = z.infer<typeof formSchema>;
 
-interface ClientFormProps {
-  initialData: Client | null;
+interface PlanFormProps {
+  initialData: Plan | null;
 }
 
-export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
+export const PlanForm: React.FC<PlanFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = initialData ? "Edit client" : "Create client";
-  const description = initialData ? "Edit a client." : "Add a new client";
-  const toastMessage = initialData ? "Client updated." : "Client created.";
+  const [activityList, setActivityList] = useState<Activity[] | []>([])
+  const title = initialData ? "Edit plan" : "Create plan";
+  const description = initialData ? "Edit a plan." : "Add a new plan";
+  const toastMessage = initialData ? "Plan updated." : "Plan created.";
   const action = initialData ? "Save changes" : "Create";
 
-  const form = useForm<ClientFormValues>({
+  const form = useForm<PlanFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
       description: "",
-      email: "",
     },
   });
-  const onSubmit = async (data: ClientFormValues) => {
+  const onSubmit = async (data: PlanFormValues) => {
+
     try {
       setLoading(true);
 
       if (initialData) {
-        await axios.patch(`/api/clients/${params.clientId}`, data);
+        await axios.patch(`/api/plans/${params.planId}`, data);
         router.refresh();
       } else {
-        const response = await axios.post("/api/clients", data);
-        router.push(`/clients/${response.data.id}`);
+        const response = await axios.post("/api/plans", data);
+        router.push(`/plans/${response.data.id}`);
       }
       toast.success(toastMessage);
     } catch (error: any) {
@@ -76,16 +76,12 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/clients/${params.clientId}`
-      );
+      await axios.delete(`/api/plans/${params.planId}`);
       router.refresh();
-      router.push('/clients');
-      toast.success("Client deleted.");
+      router.push("/plans");
+      toast.success("Plan deleted.");
     } catch (error: any) {
-      toast.error(
-        "Could not delete client"
-      );
+      toast.error("Could not delete client");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -100,17 +96,22 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
         loading={loading}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
-        {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
-        )}
+        <div className="flex flex-row space-x-4">
+          <Heading title={title} description={description} />
+          {initialData && <span>{initialData?.status}</span>}
+        </div>
+        <div className="flex flex-row space-x-3">
+          {initialData && (
+            <Button
+              disabled={loading}
+              variant="destructive"
+              size="sm"
+              onClick={() => setOpen(true)}
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
       <Separator />
       <Form {...form}>
@@ -118,6 +119,9 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
+          <Button disabled={loading} className="ml-auto" type="submit">
+            {action}
+          </Button>
           <div className="md:grid md:grid-cols-2 gap-8">
             <FormField
               control={form.control}
@@ -128,24 +132,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Client Name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Client email"
+                      placeholder="Plan Name"
                       {...field}
                     />
                   </FormControl>
@@ -162,7 +149,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      placeholder="Any extra details you want to add for the client..."
+                      placeholder="Any extra details you want to add for the plan..."
                       {...field}
                     />
                   </FormControl>
@@ -171,11 +158,9 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
               )}
             />
           </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
-          </Button>
         </form>
       </Form>
+      <Separator />
     </>
   );
 };

@@ -51,7 +51,7 @@ model Activity {
   videoUrl          String
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
-  Plan              Plan?          @relation(fields: [planId], references: [id])
+  Plan              Plan?          @relation("PlanToActivity", fields: [planId], references: [id])
   planId            String?
 
   @@index([parentActivityId])
@@ -66,7 +66,7 @@ model Plan {
   description String
   note        String?
   status      PlanStatus @default(DRAFT)
-  Activity    Activity[]
+  activityList    Activity[] @relation("PlanToActivity")
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 

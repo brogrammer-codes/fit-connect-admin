@@ -6,17 +6,17 @@ export async function POST(req: Request) {
   try {
     const { userId } = auth()
     const body = await req.json()
-    const { name, description = '', email = '' } = body
+    const { name, description = '' } = body
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
     if (!name) {
-      return new NextResponse("Client name is required", { status: 400 })
+      return new NextResponse("Plan name is required", { status: 400 })
     }
-    const store = await prismadb.client.create({data: {name, userId, description, email}})
-    return NextResponse.json(store)
+    const plan = await prismadb.plan.create({data: {name, userId, description}})
+    return NextResponse.json(plan)
   } catch (error) {
-    console.log('[CLIENTS_POST]', error)
+    console.log('[PLANS_POST]', error)
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

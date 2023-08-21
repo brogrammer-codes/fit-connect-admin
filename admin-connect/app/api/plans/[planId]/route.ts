@@ -4,9 +4,9 @@ import { auth } from "@clerk/nextjs";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { clientId: string} }
+  { params }: { params: { planId: string} }
 ) {
-  const { clientId } = params
+  const { planId } = params
 
   try {
     const { userId } = auth();
@@ -15,28 +15,28 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (!clientId) {
-      return new NextResponse("Billboard id is required", { status: 400 });
+    if (!planId) {
+      return new NextResponse("Plan id is required", { status: 400 });
     }
 
-    const clientByUserId = await prismadb.client.findFirst({
+    const planByUserId = await prismadb.plan.findFirst({
       where: {
-        id: clientId,
+        id: planId,
         userId,
       }
     });
 
-    if (!clientByUserId) {
+    if (!planByUserId) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const billboard = await prismadb.client.delete({
+    const plan = await prismadb.plan.delete({
       where: {
-        id: clientId,
+        id: planId,
       }
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(plan);
   } catch (error) {
     console.log('[BILLBOARD_DELETE]', error);
     return new NextResponse("Internal error", { status: 500 });
@@ -45,9 +45,9 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { clientId: string } }
+  { params }: { params: { planId: string } }
 ) {
-  const { clientId } = params
+  const { planId } = params
   try {
     const { userId } = auth()
     const body = await req.json()
@@ -60,28 +60,27 @@ export async function PATCH(
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!clientId) {
-      return new NextResponse("Client ID is required", { status: 400 });
+    if (!planId) {
+      return new NextResponse("Plan ID is required", { status: 400 });
     }
-    const clientByUser = await prismadb.client.findFirst({
-      where: {id: clientId, userId}
+    const planByUser = await prismadb.plan.findFirst({
+      where: {id: planId, userId}
     })
-    if (!clientByUser) {
+    if (!planByUser) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const client = await prismadb.client.update({
+    const plan = await prismadb.plan.update({
       where: {
-        id: clientId,
+        id: planId,
       },
       data: {
         name,
-        description, 
-        email
+        description,
       }
     });
 
-    return NextResponse.json(client);
+    return NextResponse.json(plan);
   } catch (error) {
     console.log('[CLIENT_PATCH]', error);
     return new NextResponse("Internal error", { status: 500 });
