@@ -58,24 +58,26 @@ export const PlanForm: React.FC<PlanFormProps> = ({
     }),
     []
   );
-    const addActivity = () => {
-      if(initialData) {
-        let newActivity: Activity = {
-          id: "",
-          name: "",
-          userId: "",
-          description: "",
-          parentActivityId: null,
-          note: null,
-          status: "DRAFT",
-          videoUrl: "",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          planId: initialData?.id
-        }
-        setActivityList([...activityList, newActivity])
-      }
+  const addActivity = async () => {
+    if (initialData) {
+      // let newActivity: Activity = {
+      //   id: "",
+      //   name: "",
+      //   userId: "",
+      //   description: "",
+      //   parentActivityId: null,
+      //   note: null,
+      //   status: "DRAFT",
+      //   videoUrl: "",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      //   planId: initialData?.id
+      // }
+      // setActivityList([...activityList, newActivity])
+      await axios.post(`/api/plans/${initialData.id}/activity`)
+      router.refresh()
     }
+  }
   const form = useForm<PlanFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
@@ -86,8 +88,15 @@ export const PlanForm: React.FC<PlanFormProps> = ({
   useEffect(() => {
     if (initialData) {
       if (initialData.status === PlanStatus.DRAFT) {
-        messageCopy.title = "Edit plan";
-        messageCopy.description = "Edit your plan";
+        messageCopy.title = "Edit plan draft";
+        messageCopy.description = "Edit your plan draft, this can be a bit more generic and you can customize it when you assign it to a client. ";
+        messageCopy.toastMessage = "Plan Updated";
+        messageCopy.action = "Save Changes";
+      }
+      if (initialData.status === PlanStatus.ASSIGNED) {
+
+        messageCopy.title = "Edit Client plan";
+        messageCopy.description = "Edit the plan assigned to the client";
         messageCopy.toastMessage = "Plan Updated";
         messageCopy.action = "Save Changes";
       }
@@ -142,7 +151,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex flex-row space-x-4">
           <Heading title={messageCopy.title} description={messageCopy.description} />
-          {initialData && <StatusPill status={initialData.status}/>}
+          {initialData && <StatusPill status={initialData.status} />}
         </div>
         <div className="flex flex-row space-x-3">
           {initialData && (
