@@ -15,15 +15,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Plan } from "@prisma/client";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  plan: Plan;
 }
 
 export function ActivityTable<TData, TValue>({
   columns,
   data,
+  plan,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -42,6 +45,9 @@ export function ActivityTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  if(header.id === "tag_1") {
+                    return (<TableHead key={header.id}> Weight</TableHead>)
+                  }
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder

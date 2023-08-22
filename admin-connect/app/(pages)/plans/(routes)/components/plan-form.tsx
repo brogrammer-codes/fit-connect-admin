@@ -204,7 +204,7 @@ export const PlanForm: React.FC = ({}) => {
           <Button variant={"secondary"} onClick={addActivity}>
             Add Activity
           </Button>
-          <ActivityTable data={activityList} columns={columns} />
+          <ActivityTable data={activityList} columns={columns} plan={plan}/>
         </>
       )}
     </>
