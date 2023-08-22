@@ -48,7 +48,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onClientConfirm = async (clientId: string) => {
     try {
       setLoading(true);
-      await axios.post(`/api/clients/${clientId}/assign/${data.id}`)
+      const response = await axios.post(`/api/clients/${clientId}/assign/${data.id}`)
+      router.push(`/plans/${response.data.id}`)
     } catch (error) {
       toast.error("Could not delete client");
     } finally {

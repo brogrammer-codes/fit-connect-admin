@@ -1,5 +1,10 @@
 import { cn } from "@/lib/utils";
 import { ActivityStatus, PlanStatus } from "@prisma/client";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface StatusPillInterface {
   status: PlanStatus | ActivityStatus;
@@ -18,11 +23,20 @@ export const StatusPill: React.FC<StatusPillInterface> = ({ status }) => {
     case "DRAFT":
       bgColor = "bg-amber-500";
       break;
+    case "ASSIGNED":
+      bgColor = "bg-sky-500";
+      break;
     case "IN_PLAN":
       bgColor = "bg-emerald-600";
       break;
     default:
       break;
   }
-  return <div className={cn("w-4 h-4 rounded-full", bgColor)} />;
+  return (
+    <Popover>
+      <PopoverTrigger><div className={cn("w-4 h-4 rounded-full", bgColor)} /></PopoverTrigger>
+      <PopoverContent>{status}</PopoverContent>
+    </Popover>
+
+  );
 };

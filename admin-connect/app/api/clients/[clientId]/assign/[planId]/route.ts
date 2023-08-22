@@ -20,11 +20,15 @@ export async function POST(
         const clientByUser = await prismadb.client.findFirst({
             where: { id: clientId, userId }
         })
-        const planByUser = await prismadb.plan.findFirst({ where: { id: planId, userId } })
+        const planByUser = await prismadb.plan.findFirst({ where: { id: planId, userId }, include: { activityList: true } })
         if (!clientByUser || !planByUser) {
             return new NextResponse("Unauthorized", { status: 405 });
         }
 
+        const plan = await prismadb.plan.create({ data: { name: planByUser.name, description: planByUser.description, userId: planByUser.userId, clientId: clientId, status: "ASSIGNED" } })
+        planByUser.activityList.map(async (activity) => {
+            await prismadb.activity.create({ data: { name: activity.name, description: activity.description, planId: plan.id, videoUrl: activity.videoUrl, userId } })
+        })
         //   const client = await prismadb.client.update({
         //     where: {
         //       id: clientId,
@@ -36,7 +40,7 @@ export async function POST(
         //     }
         //   });
 
-        return NextResponse.json({ planId, clientId });
+        return NextResponse.json(plan);
     } catch (error) {
         console.log('[CLIENT_PATCH]', error);
         return new NextResponse("Internal error", { status: 500 });

@@ -25,7 +25,6 @@ enum ActivityStatus {
   DISABLED
 }
 
-
 model Client {
   id          String   @id @default(uuid())
   name        String
@@ -34,6 +33,7 @@ model Client {
   email       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  planList    Plan[]   @relation("ClientToPlan")
 
   @@index([userId])
 }
@@ -60,15 +60,18 @@ model Activity {
 }
 
 model Plan {
-  id          String     @id @default(uuid())
-  name        String
-  userId      String
-  description String
-  note        String?
-  status      PlanStatus @default(DRAFT)
-  activityList    Activity[] @relation("PlanToActivity")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id           String     @id @default(uuid())
+  name         String
+  userId       String
+  description  String
+  note         String?
+  status       PlanStatus @default(DRAFT)
+  activityList Activity[] @relation("PlanToActivity")
+  clientId     String?
+  client       Client?    @relation("ClientToPlan", fields: [clientId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   @@index([userId])
+  @@index([clientId])
 }
