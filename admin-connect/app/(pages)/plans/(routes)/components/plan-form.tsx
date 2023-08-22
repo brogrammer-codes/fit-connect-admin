@@ -42,6 +42,7 @@ export const PlanForm: React.FC<PlanFormProps> = ({
   initialData,
   initialActivityList,
 }) => {
+  
   const params = useParams();
   const router = useRouter();
 
@@ -60,20 +61,6 @@ export const PlanForm: React.FC<PlanFormProps> = ({
   );
   const addActivity = async () => {
     if (initialData) {
-      // let newActivity: Activity = {
-      //   id: "",
-      //   name: "",
-      //   userId: "",
-      //   description: "",
-      //   parentActivityId: null,
-      //   note: null,
-      //   status: "DRAFT",
-      //   videoUrl: "",
-      //   createdAt: new Date(),
-      //   updatedAt: new Date(),
-      //   planId: initialData?.id
-      // }
-      // setActivityList([...activityList, newActivity])
       await axios.post(`/api/plans/${initialData.id}/activity`)
       router.refresh()
     }
@@ -140,6 +127,8 @@ export const PlanForm: React.FC<PlanFormProps> = ({
       setOpen(false);
     }
   };
+  console.log(form.getValues('name'), initialData?.name);
+
   return (
     <>
       <AlertModal

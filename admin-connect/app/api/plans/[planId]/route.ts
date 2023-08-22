@@ -2,9 +2,42 @@ import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
+export async function GET(req: Request,
+  { params }: { params: { planId: string } }) {
+  const { planId } = params
+
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 });
+    }
+
+    if (!planId) {
+      return new NextResponse("Plan id is required", { status: 400 });
+    }
+
+    const planByUserId = await prismadb.plan.findFirst({
+      where: {
+        id: planId,
+        userId,
+      }, include: {
+        activityList: true, client: true
+      }
+    });
+    if (!planByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 });
+    }
+    return NextResponse.json(planByUserId);
+  } catch (error) {
+    console.log('[PLAN_GET]', error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
 export async function DELETE(
   req: Request,
-  { params }: { params: { planId: string} }
+  { params }: { params: { planId: string } }
 ) {
   const { planId } = params
 
@@ -38,7 +71,7 @@ export async function DELETE(
 
     return NextResponse.json(plan);
   } catch (error) {
-    console.log('[BILLBOARD_DELETE]', error);
+    console.log('[PLAN_DELETE]', error);
     return new NextResponse("Internal error", { status: 500 });
   }
 };
@@ -64,7 +97,7 @@ export async function PATCH(
       return new NextResponse("Plan ID is required", { status: 400 });
     }
     const planByUser = await prismadb.plan.findFirst({
-      where: {id: planId, userId}
+      where: { id: planId, userId }
     })
     if (!planByUser) {
       return new NextResponse("Unauthorized", { status: 405 });
@@ -82,7 +115,7 @@ export async function PATCH(
 
     return NextResponse.json(plan);
   } catch (error) {
-    console.log('[CLIENT_PATCH]', error);
+    console.log('[PLAN_PATCH]', error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
