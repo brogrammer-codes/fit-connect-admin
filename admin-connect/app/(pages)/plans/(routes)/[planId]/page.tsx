@@ -5,21 +5,24 @@ import { useEffect } from "react";
 import axios from "axios";
 
 const PlanPage = ({ params }: { params: { planId: string } }) => {
-  const {plan, setPlan, setActivityList, activityList} = usePlanStore()
+  const {setPlan, setActivityList, resetPlan} = usePlanStore()
   useEffect(() => {
     const findPlan = async () => await axios.get(`/api/plans/${params.planId}`)
     findPlan().then((plan) => {
-      
       setPlan(plan.data)
-      setActivityList(plan.data.activityList)
+      setActivityList(plan.data.activityList)      
+    }).catch(() => {
+      resetPlan()
+      setActivityList([])
+
     })
-  }, [params, setActivityList, setPlan])
+
+  }, [params, setActivityList, setPlan, resetPlan])
   
-  console.log(plan?.name);
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <PlanForm initialData={plan} initialActivityList={activityList} />
+        <PlanForm />
       </div>
     </div>
   );

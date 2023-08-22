@@ -6,6 +6,7 @@ interface PlanState {
   activityList: Activity[] | [];
   setPlan: (plan: Plan) => void;
   setActivityList: (activityList: Activity[]) => void;
+  resetPlan: () => void
 }
 
 export const usePlanStore = create<PlanState>()((set) => ({
@@ -13,5 +14,6 @@ export const usePlanStore = create<PlanState>()((set) => ({
   activityList: [],
   setPlan: (plan) => set(() => ({plan})),
   setActivityList: (activityList) => set(() => ({activityList})),
+  resetPlan: () => set({plan: null})
   // increase: (by) => set((state) => ({ bears: state.bears + by })),
 }));

@@ -20,7 +20,7 @@ export const columns: ColumnDef<ActivityColumn>[] = [
       const {
         original: { id, name },
       } = row;
-      return <ActivityInput value={name} activityId={id} key="name" />;
+      return <ActivityInput value={name} activityId={id} key="name"/>;
     },
   },
   {

@@ -25,6 +25,7 @@ import { AlertModal } from "@/components/modals/alert-modal";
 import { ActivityTable } from "./activity-table/activity-table";
 import { columns } from "./activity-table/activity-column";
 import { StatusPill } from "@/components/status-pill";
+import { usePlanStore } from "@/hooks/use-plan-store";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -33,22 +34,13 @@ const formSchema = z.object({
 
 type PlanFormValues = z.infer<typeof formSchema>;
 
-interface PlanFormProps {
-  initialData: Plan | null;
-  initialActivityList: Activity[] | null;
-}
-
-export const PlanForm: React.FC<PlanFormProps> = ({
-  initialData,
-  initialActivityList,
-}) => {
-  
+export const PlanForm: React.FC = ({}) => {
   const params = useParams();
   const router = useRouter();
-
+  const { plan, activityList, setActivityList } = usePlanStore();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activityList, setActivityList] = useState<Activity[] | []>([]);
+  // const [activityList, setActivityList] = useState<Activity[] | []>([]);
 
   const messageCopy = useMemo(
     () => ({
@@ -60,45 +52,47 @@ export const PlanForm: React.FC<PlanFormProps> = ({
     []
   );
   const addActivity = async () => {
-    if (initialData) {
-      await axios.post(`/api/plans/${initialData.id}/activity`)
-      router.refresh()
+    if (plan) {
+      await axios.post(`/api/plans/${plan.id}/activity`);
+      router.refresh();
     }
-  }
+  };
+
   const form = useForm<PlanFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
+    defaultValues: plan || {
       name: "",
       description: "",
     },
   });
   useEffect(() => {
-    if (initialData) {
-      if (initialData.status === PlanStatus.DRAFT) {
+    if (plan) form.reset(plan);
+    else form.reset({ name: "", description: "" });
+  }, [form, form.reset, plan]);
+
+  useEffect(() => {
+    if (plan) {
+      if (plan.status === PlanStatus.DRAFT) {
         messageCopy.title = "Edit plan draft";
-        messageCopy.description = "Edit your plan draft, this can be a bit more generic and you can customize it when you assign it to a client. ";
+        messageCopy.description =
+          "Edit your plan draft, this can be a bit more generic and you can customize it when you assign it to a client. ";
         messageCopy.toastMessage = "Plan Updated";
         messageCopy.action = "Save Changes";
       }
-      if (initialData.status === PlanStatus.ASSIGNED) {
-
+      if (plan.status === PlanStatus.ASSIGNED) {
         messageCopy.title = "Edit Client plan";
         messageCopy.description = "Edit the plan assigned to the client";
         messageCopy.toastMessage = "Plan Updated";
         messageCopy.action = "Save Changes";
       }
     }
-  }, [initialData, messageCopy]);
-
-  useEffect(() => {
-    if (initialActivityList) setActivityList([...initialActivityList]);
-  }, [initialActivityList]);
+  }, [plan, messageCopy]);
 
   const onSubmit = async (data: PlanFormValues) => {
     try {
       setLoading(true);
 
-      if (initialData) {
+      if (plan) {
         await axios.patch(`/api/plans/${params.planId}`, data);
         router.refresh();
       } else {
@@ -127,7 +121,6 @@ export const PlanForm: React.FC<PlanFormProps> = ({
       setOpen(false);
     }
   };
-  console.log(form.getValues('name'), initialData?.name);
 
   return (
     <>
@@ -139,11 +132,14 @@ export const PlanForm: React.FC<PlanFormProps> = ({
       />
       <div className="flex items-center justify-between">
         <div className="flex flex-row space-x-4">
-          <Heading title={messageCopy.title} description={messageCopy.description} />
-          {initialData && <StatusPill status={initialData.status} />}
+          <Heading
+            title={messageCopy.title}
+            description={messageCopy.description}
+          />
+          {plan && <StatusPill status={plan.status} />}
         </div>
         <div className="flex flex-row space-x-3">
-          {initialData && (
+          {plan && (
             <Button
               disabled={loading}
               variant="destructive"
@@ -202,10 +198,12 @@ export const PlanForm: React.FC<PlanFormProps> = ({
           </div>
         </form>
       </Form>
-      {initialData && (
+      {plan && (
         <>
           <Separator />
-          <Button variant={'secondary'} onClick={addActivity}>Add Activity</Button>
+          <Button variant={"secondary"} onClick={addActivity}>
+            Add Activity
+          </Button>
           <ActivityTable data={activityList} columns={columns} />
         </>
       )}
