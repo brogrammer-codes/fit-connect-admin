@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb"
 import { auth } from "@clerk/nextjs"
+import { ActivityStatus } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request, { params }: { params: { planId: string } }) {
@@ -18,7 +19,7 @@ export async function POST(req: Request, { params }: { params: { planId: string 
     if (!planByUser) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
-    const activity = await prismadb.activity.create({data: {name: '', description: '', planId, userId, videoUrl: ''}})
+    const activity = await prismadb.activity.create({ data: { name: '', description: '', planId, userId, videoUrl: '', status: ActivityStatus.IN_PLAN } })
     return NextResponse.json(activity)
   } catch (error) {
     console.log('[PLANS_POST]', error)
