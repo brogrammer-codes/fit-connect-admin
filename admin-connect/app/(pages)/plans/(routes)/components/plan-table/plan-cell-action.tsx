@@ -18,6 +18,7 @@ import { AlertModal } from "@/components/modals/alert-modal";
 
 import { PlanColumn } from "./plan-columns";
 import { ClientModal } from "@/components/modals/client-modal";
+import { PlanStatus } from "@prisma/client";
 
 interface CellActionProps {
   data: PlanColumn;
@@ -48,8 +49,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onClientConfirm = async (clientId: string) => {
     try {
       setLoading(true);
-      const response = await axios.post(`/api/clients/${clientId}/assign/${data.id}`)
-      router.push(`/plans/${response.data.id}`)
+      const response = await axios.post(
+        `/api/clients/${clientId}/assign/${data.id}`
+      );
+      router.push(`/plans/${response.data.id}`);
     } catch (error) {
       toast.error("Could not delete client");
     } finally {
@@ -66,10 +69,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         onConfirm={onConfirm}
         loading={loading}
       />
-      <ClientModal isOpen={clientModalOpen}
+      <ClientModal
+        isOpen={clientModalOpen}
         onClose={() => setClientModalOpen(false)}
         onConfirm={onClientConfirm}
-        loading={loading} />
+        loading={loading}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -79,16 +84,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() =>
-              router.push(`/plans/${data.id}`)
-            }
-          >
-            <Edit className="mr-2 h-4 w-4" /> Update
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setClientModalOpen(true)}>
-            <User2 className="mr-2 h-4 w-4 text-red-700" /> Assign to Client
-          </DropdownMenuItem>
+          {data.status !== PlanStatus.COMPLETE && (
+            <DropdownMenuItem onClick={() => router.push(`/plans/${data.id}`)}>
+              <Edit className="mr-2 h-4 w-4" /> Update
+            </DropdownMenuItem>
+          )}
+          {data.status === PlanStatus.DRAFT && (
+            <DropdownMenuItem onClick={() => setClientModalOpen(true)}>
+              <User2 className="mr-2 h-4 w-4 text-red-700" /> Assign to Client
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={() => setDeleteAlertOpen(true)}>
             <Trash className="mr-2 h-4 w-4 text-red-700" /> Delete
           </DropdownMenuItem>

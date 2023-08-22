@@ -22,7 +22,10 @@ const ClientPage = async ({
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <ClientForm initialData={client} />
-        <DataTable columns={columns} data={formattedPlans} filterKey="name" />
+        {
+          client ? (<DataTable columns={columns} data={formattedPlans} filterKey="name" />) : null
+        }
+        
       </div>
     </div>
   );

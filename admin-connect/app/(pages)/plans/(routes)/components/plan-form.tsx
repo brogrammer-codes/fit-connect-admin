@@ -58,22 +58,24 @@ export const PlanForm: React.FC<PlanFormProps> = ({
     }),
     []
   );
-  const addActivity = () => {
+  const addActivity = async () => {
     if (initialData) {
-      let newActivity: Activity = {
-        id: "",
-        name: "",
-        userId: "",
-        description: "",
-        parentActivityId: null,
-        note: null,
-        status: "DRAFT",
-        videoUrl: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        planId: initialData?.id
-      }
-      setActivityList([...activityList, newActivity])
+      // let newActivity: Activity = {
+      //   id: "",
+      //   name: "",
+      //   userId: "",
+      //   description: "",
+      //   parentActivityId: null,
+      //   note: null,
+      //   status: "DRAFT",
+      //   videoUrl: "",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      //   planId: initialData?.id
+      // }
+      // setActivityList([...activityList, newActivity])
+      await axios.post(`/api/plans/${initialData.id}/activity`)
+      router.refresh()
     }
   }
   const form = useForm<PlanFormValues>({
