@@ -9,12 +9,13 @@ export default async function Clients() {
   const { userId } = auth();
   if (!userId) redirect("/");
 
-  const clients = await prismadb.client.findMany({ where: { userId: userId } });
+  const clients = await prismadb.client.findMany({ where: { userId: userId }, include: { planList: true } });
   const formattedClients: ClientColumn[] = clients.map((client) => ({
     id: client.id,
     name: client.name,
     createdAt: format(client.createdAt, "MMMM do, yyyy"),
     email: client.email,
+    plans: client.planList.length
   }));
   return (
     <div className="flex-col">
