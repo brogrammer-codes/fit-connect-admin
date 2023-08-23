@@ -3,9 +3,8 @@ import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Activity, Plan } from "@prisma/client";
 import { DataTable } from "@/components/ui/data-table";
-import { PlanColumn, columns } from "./plan-table/plan-columns";
+import { PlanColumn, columns } from "@/components/plan-table/plan-columns";
 import { Separator } from "@/components/ui/separator";
 
 interface PlanDisplayInterface {
