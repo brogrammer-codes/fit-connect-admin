@@ -9,13 +9,13 @@ export default function Home() {
     redirect("/dashboard");
   }
   return (
-    <div className="flex flex-col px-10 py-3 justify-items-center">
+    <div className="flex flex-col px-10 py-3 items-center">
+      <div className="max-w-2xl space-y-5 pt-4">
       <Heading
         title="Welcome to Fit Connect Admin Portal"
         description="Empowering Your Coaching
           Excellence"
       />
-      <div className="max-w-2xl space-y-5 pt-4">
         <h2 className="text-xl font-bold">Unlock Your Coaching Potential</h2>
         <p className="text-md ">
           Welcome to the Fit Connect Admin Portal - your hub for transforming

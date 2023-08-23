@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { ClientForm } from "../components/client-form";
 import { DataTable } from "@/components/ui/data-table";
-import { PlanColumn, columns } from "@/app/(pages)/plans/(routes)/components/plan-table/plan-columns";
+import { PlanColumn, columns } from "@/components/plan-table/plan-columns";
 import { format } from "date-fns";
 
 

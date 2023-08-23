@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
 import { PlanDisplay } from "./components/plan-display";
-import { PlanColumn } from "./components/plan-table/plan-columns";
+import { PlanColumn } from "@/components/plan-table/plan-columns";
 
 export default async function Plans() {
   const { userId } = auth();
