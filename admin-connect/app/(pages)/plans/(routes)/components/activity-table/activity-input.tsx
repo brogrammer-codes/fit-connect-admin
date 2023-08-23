@@ -34,7 +34,12 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
       setActivityList([...updatedActivityList]);
     }
   };
-
+  // TODO: Add activity picker when the input key is name
+  // if(inputKey === "name") {
+  //   return (
+  //     <></>
+  //   )
+  // }
   return (
     <Input
       value={activity[inputKey]}

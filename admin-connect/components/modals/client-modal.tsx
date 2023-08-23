@@ -4,8 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
-import { auth } from "@clerk/nextjs";
-import prismadb from "@/lib/prismadb";
 import { Client } from "@prisma/client";
 import ClientPicker from "../client-picker";
 import axios from "axios";
