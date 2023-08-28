@@ -46,7 +46,7 @@ export function ActivityTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   if(header.id === "tag_1") {
-                    return (<TableHead key={header.id}> Weight</TableHead>)
+                    return (<TableHead key={header.id}> {plan.name}</TableHead>)
                   }
                   return (
                     <TableHead key={header.id}>

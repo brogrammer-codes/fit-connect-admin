@@ -24,11 +24,9 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     header: "Name",
     cell: ({ row }) => {
       const {
-        original: { id, name },
+        original: { id },
       } = row;
-      return (
-        <ActivityInput value={name} activityId={id} inputKey="name" key={id} />
-      );
+      return <ActivityInput activityId={id} inputKey="name" key={id} />;
     },
   },
   {
@@ -36,38 +34,14 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     header: "Tag 1",
   },
   {
-    id: "description",
-    header: "Description",
-    cell: ({ row }) => {
-      const {
-        original: { id, description },
-      } = row;
-      return (
-        <Popover>
-          <PopoverTrigger>Description</PopoverTrigger>
-          <PopoverContent>{description}</PopoverContent>
-        </Popover>
-      );
-    },
-  },
-  {
-    id: "videoUrl",
-    header: "Video",
-    cell: ({ row }) => {
-      const {
-        original: { id, videoUrl },
-      } = row;
-      return (
-        <Popover>
-          <PopoverTrigger>URL</PopoverTrigger>
-          <PopoverContent>{videoUrl}</PopoverContent>
-        </Popover>
-      );
-    },
-  },
-  {
     id: "status",
     header: "Status",
-    cell: ({ row }) => <StatusPill status={row.original.status} />,
+    cell: ({ row }) => (
+      <div className="flex space-x-2">
+        <StatusPill status={row.original.status} />
+        <ActivityInput activityId={row.original.id} inputKey="videoUrl" key={row.original.id} />
+        <ActivityInput activityId={row.original.id} inputKey="description" key={row.original.id} />
+      </div>
+    ),
   },
 ];
