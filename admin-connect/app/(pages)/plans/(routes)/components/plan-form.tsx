@@ -37,7 +37,7 @@ type PlanFormValues = z.infer<typeof formSchema>;
 export const PlanForm: React.FC = ({}) => {
   const params = useParams();
   const router = useRouter();
-  const { plan, activityList, setActivityList } = usePlanStore();
+  const { plan, activityList } = usePlanStore();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [activityList, setActivityList] = useState<Activity[] | []>([]);
