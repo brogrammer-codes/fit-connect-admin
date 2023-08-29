@@ -27,19 +27,8 @@ export async function POST(
 
         const plan = await prismadb.plan.create({ data: { name: planByUser.name, description: planByUser.description, userId: planByUser.userId, clientId: clientId, status: "ASSIGNED" } })
         planByUser.activityList.map(async (activity) => {
-            await prismadb.activity.create({ data: { name: activity.name, description: activity.description, planId: plan.id, videoUrl: activity.videoUrl, userId } })
+            await prismadb.activity.create({ data: { name: activity.name, description: activity.description, planId: plan.id, videoUrl: activity.videoUrl, userId, status: "IN_PLAN" } })
         })
-        //   const client = await prismadb.client.update({
-        //     where: {
-        //       id: clientId,
-        //     },
-        //     data: {
-        //       name,
-        //       description, 
-        //       email
-        //     }
-        //   });
-
         return NextResponse.json(plan);
     } catch (error) {
         console.log('[CLIENT_PATCH]', error);
