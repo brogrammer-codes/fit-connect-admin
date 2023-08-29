@@ -3,13 +3,19 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ActivityStatus } from "@prisma/client";
 import { StatusPill } from "@/components/status-pill";
-import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ActivityInput } from "./activity-input";
 
 export type ActivityColumn = {
   id: string;
   name: string;
   status: ActivityStatus;
+  description: string;
+  videoUrl: string;
 };
 
 export const columns: ColumnDef<ActivityColumn>[] = [
@@ -18,18 +24,24 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     header: "Name",
     cell: ({ row }) => {
       const {
-        original: { id, name },
+        original: { id },
       } = row;
-      return <ActivityInput value={name} activityId={id} inputKey="name" key={id}/>;
+      return <ActivityInput activityId={id} inputKey="name" key={id} />;
     },
   },
   {
     id: "tag_1",
-    header: "Tag 1"
+    header: "Tag 1",
   },
   {
-    id: "status",
-    header: "Status",
-    cell: ({ row }) => <StatusPill status={row.original.status} />,
+    id: "controls",
+    header: "Controls",
+    cell: ({ row }) => (
+      <div className="flex space-x-2">
+        <StatusPill status={row.original.status} />
+        <ActivityInput activityId={row.original.id} inputKey="videoUrl" key={row.original.id} />
+        <ActivityInput activityId={row.original.id} inputKey="description" key={row.original.id} />
+      </div>
+    ),
   },
 ];

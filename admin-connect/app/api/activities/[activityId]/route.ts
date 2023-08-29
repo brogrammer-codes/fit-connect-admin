@@ -30,13 +30,13 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const billboard = await prismadb.activity.delete({
+    const activity = await prismadb.activity.delete({
       where: {
         id: activityId,
       }
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(activity);
   } catch (error) {
     console.log('[ACTIVITY_DELETE]', error);
     return new NextResponse("Internal error", { status: 500 });
