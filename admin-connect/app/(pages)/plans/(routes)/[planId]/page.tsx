@@ -9,9 +9,9 @@ const PlanPage = ({ params }: { params: { planId: string } }) => {
   useEffect(() => {
     const findPlan = async () => await axios.get(`/api/plans/${params.planId}`);
     findPlan()
-      .then((plan) => {
-        setPlan(plan.data);
-        setActivityList(plan.data.activityList);
+      .then(({data}) => {
+        setPlan(data);
+        setActivityList(data.activityList);
       })
       .catch(() => {
         resetPlan();

@@ -37,10 +37,10 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     id: "controls",
     header: "Controls",
     cell: ({ row }) => (
-      <div className="flex space-x-2">
+      <div className="flex space-x-2" key={row.original.id}>
         <StatusPill status={row.original.status} />
-        <ActivityInput activityId={row.original.id} inputKey="videoUrl" key={row.original.id} />
-        <ActivityInput activityId={row.original.id} inputKey="description" key={row.original.id} />
+        <ActivityInput activityId={row.original.id} inputKey="videoUrl" key={`video-url-${row.original.id}`} />
+        <ActivityInput activityId={row.original.id} inputKey="description" key={`description-${row.original.id}`} />
       </div>
     ),
   },
