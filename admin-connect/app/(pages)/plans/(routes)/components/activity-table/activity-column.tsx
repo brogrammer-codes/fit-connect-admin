@@ -34,8 +34,8 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     header: "Tag 1",
   },
   {
-    id: "status",
-    header: "Status",
+    id: "controls",
+    header: "Controls",
     cell: ({ row }) => (
       <div className="flex space-x-2">
         <StatusPill status={row.original.status} />

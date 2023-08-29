@@ -9,7 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Book, VideoIcon } from "lucide-react";
 
-type ActivityInputKeys = "name" | "videoUrl" | "description";
+type ActivityInputKeys = "name" | "videoUrl" | "description" | "delete";
 
 interface ActivityInputInterface {
   activityId: string;
@@ -50,8 +50,8 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
         <PopoverTrigger>
           <VideoIcon />
         </PopoverTrigger>
-        <PopoverContent className="flex flex-col">
-          <span>Video Url</span>
+        <PopoverContent className="flex flex-col space-y-2 p-3">
+          <span className="text-xs text-slate-600 font-semibold">Video URL</span>
           <Input
             value={activity[inputKey]}
             onChange={({ target: { value } }) => onInputChange(value)}
@@ -67,7 +67,8 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
         <PopoverTrigger>
           <Book />
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent className="flex flex-col space-y-2 p-3">
+        <span className="text-xs text-slate-600 font-semibold">Description</span>
           <Input
             value={activity[inputKey]}
             onChange={({ target: { value } }) => onInputChange(value)}
