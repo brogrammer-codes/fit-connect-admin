@@ -9,7 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Book, VideoIcon } from "lucide-react";
 
-type ActivityInputKeys = "name" | "videoUrl" | "description" | "delete";
+type ActivityInputKeys = "name" | "videoUrl" | "description";
 
 interface ActivityInputInterface {
   activityId: string;
