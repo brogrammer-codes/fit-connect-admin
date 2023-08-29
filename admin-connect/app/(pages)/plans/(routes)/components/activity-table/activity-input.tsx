@@ -8,6 +8,9 @@ import {
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Book, VideoIcon } from "lucide-react";
+import ActivityPicker from "@/components/activity-picker";
+import { Activity } from "@prisma/client";
+import { Textarea } from "@/components/ui/textarea";
 
 type ActivityInputKeys = "name" | "videoUrl" | "description";
 
@@ -22,9 +25,12 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
   const { setActivityList, activityList } = usePlanStore();
   const activity = activityList.find((act) => act.id === activityId);
   if (!activity) return null;
-  const updateActivity = async () => {
+  const updateActivity = async (newActivity?: Activity) => {
     try {
-      await axios.patch(`/api/activities/${activityId}`, activity);
+      await axios.patch(
+        `/api/activities/${activityId}`,
+        newActivity || activity
+      );
     } catch (error) {}
   };
   const onInputChange = (value: string) => {
@@ -38,12 +44,28 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
       setActivityList([...updatedActivityList]);
     }
   };
+  const onActivitySelect = (updatedAct: Activity) => {
+    const updatedActivityList = [...activityList];
+    const index = updatedActivityList.findIndex(
+      (item) => item.id === activityId
+    );
+    if (index !== -1) {
+      updatedActivityList[index]["name"] = updatedAct.name;
+      updatedActivityList[index]["description"] = updatedAct.description;
+      updatedActivityList[index]["videoUrl"] = updatedAct.videoUrl;
+      setActivityList([...updatedActivityList]);
+      updateActivity(updatedActivityList[index]);
+    }
+  };
   // TODO: Add activity picker when the input key is name
-  // if(inputKey === "name") {
-  //   return (
-  //     <></>
-  //   )
-  // }
+  if (inputKey === "name") {
+    return (
+      <ActivityPicker
+        currentActivity={activity}
+        onActivitySelect={onActivitySelect}
+      />
+    );
+  }
   if (inputKey === "videoUrl") {
     return (
       <Popover>
@@ -51,11 +73,13 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
           <VideoIcon />
         </PopoverTrigger>
         <PopoverContent className="flex flex-col space-y-2 p-3">
-          <span className="text-xs text-slate-600 font-semibold">Video URL</span>
+          <span className="text-xs text-slate-600 font-semibold">
+            Video URL
+          </span>
           <Input
             value={activity[inputKey]}
             onChange={({ target: { value } }) => onInputChange(value)}
-            onBlur={updateActivity}
+            onBlur={() => updateActivity()}
           />
         </PopoverContent>
       </Popover>
@@ -68,11 +92,13 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
           <Book />
         </PopoverTrigger>
         <PopoverContent className="flex flex-col space-y-2 p-3">
-        <span className="text-xs text-slate-600 font-semibold">Description</span>
-          <Input
+          <span className="text-xs text-slate-600 font-semibold">
+            Description
+          </span>
+          <Textarea
             value={activity[inputKey]}
             onChange={({ target: { value } }) => onInputChange(value)}
-            onBlur={updateActivity}
+            onBlur={() => updateActivity()}
           />
         </PopoverContent>
       </Popover>
@@ -82,7 +108,7 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
     <Input
       value={activity[inputKey]}
       onChange={({ target: { value } }) => onInputChange(value)}
-      onBlur={updateActivity}
+      onBlur={() => updateActivity()}
     />
   );
 };
