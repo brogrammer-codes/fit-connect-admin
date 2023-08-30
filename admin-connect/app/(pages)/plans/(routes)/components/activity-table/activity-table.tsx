@@ -45,8 +45,23 @@ export function ActivityTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  if(header.id === "tag_1") {
-                    return (<TableHead key={header.id}> {plan.name}</TableHead>)
+                  if(header.id === "tag_1" && plan.tag_1.length) {
+                    return (<TableHead key={header.id}> {plan.tag_1}</TableHead>)
+                  }
+                  if(header.id === "tag_2" && plan.tag_2.length) {
+                    return (<TableHead key={header.id}> {plan.tag_2}</TableHead>)
+                  }
+                  if(header.id === "tag_3" && plan.tag_3.length) {
+                    return (<TableHead key={header.id}> {plan.tag_3}</TableHead>)
+                  }
+                  if(header.id === "tag_4" && plan.tag_4.length) {
+                    return (<TableHead key={header.id}> {plan.tag_4}</TableHead>)
+                  }
+                  if(header.id === "tag_5" && plan.tag_5.length) {
+                    return (<TableHead key={header.id}> {plan.tag_5}</TableHead>)
+                  }
+                  if(header.id === "tag_6" && plan.tag_6.length) {
+                    return (<TableHead key={header.id}> {plan.tag_6}</TableHead>)
                   }
                   return (
                     <TableHead key={header.id}>

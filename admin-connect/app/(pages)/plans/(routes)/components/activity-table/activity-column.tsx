@@ -34,6 +34,26 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     header: "Tag 1",
   },
   {
+    id: "tag_2",
+    header: "Tag 2",
+  },
+  {
+    id: "tag_3",
+    header: "Tag 3",
+  },
+  {
+    id: "tag_4",
+    header: "Tag 4",
+  },
+  {
+    id: "tag_5",
+    header: "Tag 5",
+  },
+  {
+    id: "tag_6",
+    header: "Tag 6",
+  },
+  {
     id: "controls",
     header: "Controls",
     cell: ({ row }) => (
