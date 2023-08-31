@@ -24,8 +24,8 @@ export async function POST(
         if (!clientByUser || !planByUser) {
             return new NextResponse("Unauthorized", { status: 405 });
         }
-
-        const plan = await prismadb.plan.create({ data: { name: planByUser.name, description: planByUser.description, userId: planByUser.userId, clientId: clientId, status: "ASSIGNED" } })
+        const { name, description, tag_1, tag_2, tag_3, tag_4, tag_5, tag_6 } = planByUser
+        const plan = await prismadb.plan.create({ data: { name, description, userId, clientId, status: "ASSIGNED", tag_1, tag_2, tag_3, tag_4, tag_5, tag_6 } })
         planByUser.activityList.map(async (activity) => {
             await prismadb.activity.create({ data: { name: activity.name, description: activity.description, planId: plan.id, videoUrl: activity.videoUrl, userId, status: "IN_PLAN" } })
         })
