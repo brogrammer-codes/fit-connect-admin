@@ -91,7 +91,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           )}
           {data.status === PlanStatus.DRAFT && (
             <DropdownMenuItem onClick={() => setClientModalOpen(true)}>
-              <User2 className="mr-2 h-4 w-4 text-red-700" /> Assign to Client
+              <User2 className="mr-2 h-4 w-4 text-green-800" /> Assign to Client
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => setDeleteAlertOpen(true)}>
