@@ -43,6 +43,12 @@ model Activity {
   name              String
   userId            String
   description       String
+  tag_1             String         @default("")
+  tag_2             String         @default("")
+  tag_3             String         @default("")
+  tag_4             String         @default("")
+  tag_5             String         @default("")
+  tag_6             String         @default("")
   parentActivityId  String?
   parentActivity    Activity?      @relation("ChildActivity", fields: [parentActivityId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   childActivityList Activity[]     @relation("ChildActivity")
@@ -64,6 +70,12 @@ model Plan {
   name         String
   userId       String
   description  String
+  tag_1        String     @default("")
+  tag_2        String     @default("")
+  tag_3        String     @default("")
+  tag_4        String     @default("")
+  tag_5        String     @default("")
+  tag_6        String     @default("")
   note         String?
   status       PlanStatus @default(DRAFT)
   activityList Activity[] @relation("PlanToActivity")

@@ -12,7 +12,7 @@ import ActivityPicker from "@/components/activity-picker";
 import { Activity } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
 
-type ActivityInputKeys = "name" | "videoUrl" | "description";
+type ActivityInputKeys = "name" | "videoUrl" | "description" | "tag_1" | "tag_2"| "tag_3"| "tag_4"| "tag_5"| "tag_6";
 
 interface ActivityInputInterface {
   activityId: string;

@@ -30,6 +30,12 @@ import { usePlanStore } from "@/hooks/use-plan-store";
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(0),
+  tag_1: z.string().min(0),
+  tag_2: z.string().min(0),
+  tag_3: z.string().min(0),
+  tag_4: z.string().min(0),
+  tag_5: z.string().min(0),
+  tag_6: z.string().min(0),
 });
 
 type PlanFormValues = z.infer<typeof formSchema>;
@@ -63,6 +69,12 @@ export const PlanForm: React.FC = ({}) => {
     defaultValues: plan || {
       name: "",
       description: "",
+      tag_1: "",
+      tag_2: "",
+      tag_3: "",
+      tag_4: "",
+      tag_5: "",
+      tag_6: "",
     },
   });
   useEffect(() => {
@@ -196,6 +208,110 @@ export const PlanForm: React.FC = ({}) => {
               )}
             />
           </div>
+          <div className="md:grid md:grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="tag_1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tag 1</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Weight"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tag_2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tag 2</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Reps"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tag_3"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tag 3</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Sets"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tag_4"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tag 4</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Time"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tag_5"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tag 5</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Rest"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tag_6"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tag 6</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Other"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </form>
       </Form>
       {plan && (
@@ -204,7 +320,7 @@ export const PlanForm: React.FC = ({}) => {
           <Button variant={"secondary"} onClick={addActivity}>
             Add Activity
           </Button>
-          <ActivityTable data={activityList} columns={columns} plan={plan}/>
+          <ActivityTable data={activityList} columns={columns} plan={plan} />
         </>
       )}
     </>
