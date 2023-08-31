@@ -22,7 +22,7 @@ export async function GET(req: Request,
         id: planId,
         userId,
       }, include: {
-        activityList: true, client: true
+        activityList: {orderBy: {createdAt: "desc"}}, client: true
       }
     });
     if (!planByUserId) {
