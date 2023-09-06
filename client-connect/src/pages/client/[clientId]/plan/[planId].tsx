@@ -4,6 +4,8 @@ import { api } from "~/utils/api";
 import Head from "next/head";
 import { ActivityDisplay } from "../../components/activity-display";
 import { Heading } from "~/components/ui/heading";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 
 const ClientPlanPage: NextPage<{ clientId: string; planId: string }> = ({
   clientId,
@@ -18,12 +20,12 @@ const ClientPlanPage: NextPage<{ clientId: string; planId: string }> = ({
       <Head>
         <title>{plan.name}</title>
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24 ">
-        <div className="flex flex-col space-y-3">
-          <Heading title={plan.name} description={plan.description}/>
-          <ActivityDisplay plan={plan}/>
-        </div>
-      </main>
+      <Link href={`/client/${clientId}`}><ArrowLeftIcon /></Link>
+      <div className="flex justify-between">
+      <Heading title={plan.name} description={plan.description} />
+      <span>{plan.status}</span>
+      </div>
+      <ActivityDisplay plan={plan} />
     </>
   );
 };
@@ -33,7 +35,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const planId = context.params?.planId;
   if (typeof clientId !== "string") throw new Error("no client id");
   if (typeof planId !== "string") throw new Error("no plan id");
-  await ssg.client.getClientPlan.prefetch({clientId, planId})
+  await ssg.client.getClientPlan.prefetch({ clientId, planId });
   return {
     props: {
       trpcState: ssg.dehydrate(),
