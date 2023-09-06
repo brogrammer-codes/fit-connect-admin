@@ -12,6 +12,8 @@ import { Send, VideoIcon } from "lucide-react";
 import { type Plan } from "types/client";
 import { Textarea } from "~/components/ui/textarea";
 import { Label } from "~/components/ui/label";
+import { ActivityStatus } from "types/status";
+import { Button } from "~/components/ui/button";
 
 export const ActivityDisplay: React.FC<{ plan: Plan }> = ({ plan }) => {
   const onActivityChange = (id: string, value: string) => {
@@ -21,16 +23,19 @@ export const ActivityDisplay: React.FC<{ plan: Plan }> = ({ plan }) => {
     <div className="flex flex-col space-y-2">
       {plan.activityList.map((activity) => (
         <Card key={activity.id} className="rounded border-none bg-slate-300">
-          <CardHeader>
-            <CardTitle className="flex flex-row justify-between">
-              <span className="pr-2 font-semibold">{activity.name}</span>
-              {activity.videoUrl ? (
-                <Link href={activity.videoUrl} target="_blank">
-                  <VideoIcon />
-                </Link>
-              ) : null}
-            </CardTitle>
-            <CardDescription>{activity.description}</CardDescription>
+          <CardHeader className="flex flex-row justify-between">
+            <div className="flex flex-col">
+              <CardTitle className="flex flex-row justify-between">
+                <span className="pr-2 font-semibold">{activity.name}</span>
+                {activity.videoUrl ? (
+                  <Link href={activity.videoUrl} target="_blank">
+                    <VideoIcon />
+                  </Link>
+                ) : null}
+              </CardTitle>
+              <CardDescription>{activity.description}</CardDescription>
+            </div>
+            <span className="p-2 text-sm">{activity.status}</span>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col">
@@ -52,12 +57,23 @@ export const ActivityDisplay: React.FC<{ plan: Plan }> = ({ plan }) => {
                   onChange={(event) =>
                     onActivityChange(activity.id, event.target.value)
                   }
+                  value={activity.note ?? ""}
                   className="rounded bg-slate-200 placeholder:text-slate-400"
                   placeholder="10, 10, 12. Felt easy..."
+                  disabled={activity.status === ActivityStatus.COMPLETE}
                 />
-                <button className="rounded bg-slate-100 px-1 my-1 text-slate-800 hover:text-emerald-600">
-                  <Send />
-                </button>
+                <Button
+                  disabled={activity.status === ActivityStatus.COMPLETE}
+                  className="my-1 rounded bg-slate-100 px-1 text-slate-800 hover:text-emerald-600"
+                  size="icon"
+                >
+                  <Send className="h-5 w-5"/>
+                </Button>
+                {/* <button
+                  className="my-1 rounded bg-slate-100 px-1 text-slate-800 hover:text-emerald-600"
+                  disabled={activity.status === ActivityStatus.COMPLETE}
+                >
+                </button> */}
               </div>
             </div>
           </CardFooter>

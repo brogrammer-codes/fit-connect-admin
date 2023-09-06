@@ -6,6 +6,7 @@ import { ActivityDisplay } from "../../components/activity-display";
 import { Heading } from "~/components/ui/heading";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
+import { Textarea } from "~/components/ui/textarea";
 
 const ClientPlanPage: NextPage<{ clientId: string; planId: string }> = ({
   clientId,
@@ -26,6 +27,9 @@ const ClientPlanPage: NextPage<{ clientId: string; planId: string }> = ({
       <span>{plan.status}</span>
       </div>
       <ActivityDisplay plan={plan} />
+      <Textarea 
+        value={plan.note ?? ''}
+      />
     </>
   );
 };
