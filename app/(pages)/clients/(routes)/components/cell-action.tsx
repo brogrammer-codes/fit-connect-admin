@@ -21,6 +21,7 @@ import { ClientColumn } from "./columns";
 interface CellActionProps {
   data: ClientColumn;
 }
+const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || ''
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
@@ -44,7 +45,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Client Email copied to clipboard.");
+    toast.success("Client URL copied to clipboard.");
   };
 
   return (
@@ -64,8 +65,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.email)}>
-            <Copy className="mr-2 h-4 w-4" /> Copy Email
+          <DropdownMenuItem onClick={() => onCopy(`${clientUrl}/client/${data.id}`)}>
+            <Copy className="mr-2 h-4 w-4" /> Copy Client URL
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() =>

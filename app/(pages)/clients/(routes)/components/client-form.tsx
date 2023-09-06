@@ -20,8 +20,9 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash } from "lucide-react";
+import { ExternalLink, Trash } from "lucide-react";
 import { AlertModal } from "@/components/modals/alert-modal";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -72,20 +73,16 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
       setLoading(false);
     }
   };
-
+  const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || ''
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/clients/${params.clientId}`
-      );
+      await axios.delete(`/api/clients/${params.clientId}`);
       router.refresh();
-      router.push('/clients');
+      router.push("/clients");
       toast.success("Client deleted.");
     } catch (error: any) {
-      toast.error(
-        "Could not delete client"
-      );
+      toast.error("Could not delete client");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -102,14 +99,19 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
+          <div className="flex space-x-3">
+            <Button size="sm" variant={'link'} onClick={() => window.open(`${clientUrl}/client/${initialData.id}`)}>
+            View Client Page  <ExternalLink className="h-5 w-5 pl-1" />
+            </Button>
+            <Button
+              disabled={loading}
+              variant="destructive"
+              size="sm"
+              onClick={() => setOpen(true)}
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          </div>
         )}
       </div>
       <Separator />
