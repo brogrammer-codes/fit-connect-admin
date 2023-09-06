@@ -12,16 +12,18 @@ export async function PATCH(
     const body = await req.json()
     const { note, status } = body;
 
-    const clientActivity = await prismadb.activity.findFirst({ where: { id: activityId }, include:{ childActivityList: true}})
-
-    if(!Object.values(PlanStatus).includes(status)) {
+    const clientActivity = await prismadb.activity.findFirst({ where: { id: activityId }, include: { childActivityList: true } })
+    if (clientActivity?.status !== ActivityStatus.IN_PLAN) {
+      return new NextResponse("Only activities in a plan can be updated", { status: 403 });
+    }
+    if (!Object.values(ActivityStatus).includes(status)) {
       return new NextResponse("Updated status not found", { status: 409 });
     }
-    if(status === ActivityStatus.COMPLETE && clientActivity?.childActivityList) {
-        clientActivity.childActivityList.map(async (activity) => {
-          await prismadb.activity.update({where:{ id: activity.id}, data: {status: ActivityStatus.COMPLETE}})
-        })
-      }
+    if (status === ActivityStatus.COMPLETE && clientActivity?.childActivityList) {
+      clientActivity.childActivityList.map(async (activity) => {
+        await prismadb.activity.update({ where: { id: activity.id }, data: { status: ActivityStatus.COMPLETE } })
+      })
+    }
     const activity = await prismadb.activity.update({
       where: {
         id: activityId,
