@@ -1,28 +1,30 @@
-# Create T3 App
+# Fit Connect Client
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to the Fit Connect Client repository! Fit Connect is a powerful fitness app designed to help individuals achieve their fitness goals with personalized workout plans and expert coaching.
 
-## What's next? How do I make an app with this?
+## Technologies Used
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- [Next.js](https://nextjs.org/): A React framework for building modern web applications.
+- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for designing custom user interfaces.
+- [shadcnui](https://shadcnui.com/): A design system for creating beautiful and responsive UI components.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Getting Started
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Follow these steps to set up and run the Fit Connect client locally:
 
-## Learn More
+1. Clone this repository to your local machine.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+2. Install dependencies using your preferred package manager:
+   ```
+   bash
+   npm install
+   # or
+   yarn install
+   ```
+3. Start the development server (start admin first):
+    ```
+    npm run dev
+    # or
+    yarn dev
+    ```
+4. Open your web browser and visit http://localhost:3001 to view the Fit Connect client.
