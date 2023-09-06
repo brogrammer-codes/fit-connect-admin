@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -9,13 +8,15 @@ import {
 } from "~/components/ui/card";
 import Link from "next/link";
 import { Tags } from "types/plan";
-import { VideoIcon } from "lucide-react";
+import { Send, VideoIcon } from "lucide-react";
 import { type Plan } from "types/client";
+import { Textarea } from "~/components/ui/textarea";
+import { Label } from "~/components/ui/label";
 
-export const ActivityDisplay: React.FC<{ plan: Plan }> = ({
-  plan
-}) => {
-
+export const ActivityDisplay: React.FC<{ plan: Plan }> = ({ plan }) => {
+  const onActivityChange = (id: string, value: string) => {
+    console.log(id, value);
+  };
   return (
     <div className="flex flex-col space-y-2">
       {plan.activityList.map((activity) => (
@@ -42,10 +43,26 @@ export const ActivityDisplay: React.FC<{ plan: Plan }> = ({
               )}
             </div>
           </CardContent>
-          <CardFooter>{activity.note}</CardFooter>
+          <CardFooter>
+            <div className="flex w-full flex-col space-y-2">
+              <Label htmlFor="notes">Notes</Label>
+              <div className="flex space-x-2">
+                <Textarea
+                  id="notes"
+                  onChange={(event) =>
+                    onActivityChange(activity.id, event.target.value)
+                  }
+                  className="rounded bg-slate-200 placeholder:text-slate-400"
+                  placeholder="10, 10, 12. Felt easy..."
+                />
+                <button className="rounded bg-slate-100 px-1 my-1 text-slate-800 hover:text-emerald-600">
+                  <Send />
+                </button>
+              </div>
+            </div>
+          </CardFooter>
         </Card>
       ))}
     </div>
   );
 };
-
