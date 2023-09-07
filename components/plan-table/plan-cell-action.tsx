@@ -84,11 +84,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          {data.status !== PlanStatus.COMPLETE && (
+          
             <DropdownMenuItem onClick={() => router.push(`/plans/${data.id}`)}>
-              <Edit className="mr-2 h-4 w-4" /> Update
+              <Edit className="mr-2 h-4 w-4" /> {data.status === PlanStatus.COMPLETE ? "View" : "Update"}
             </DropdownMenuItem>
-          )}
           {data.status === PlanStatus.DRAFT && (
             <DropdownMenuItem onClick={() => setClientModalOpen(true)}>
               <User2 className="mr-2 h-4 w-4 text-green-800" /> Assign to Client

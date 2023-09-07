@@ -12,7 +12,7 @@ export async function PATCH(
     const body = await req.json()
     const { note, status } = body;
 
-    const clientActivity = await prismadb.activity.findFirst({ where: { id: activityId }, include: { childActivityList: true } })
+    const clientActivity = await prismadb.activity.findFirst({ where: { id: activityId }, include: { childActivityList: {orderBy: { createdAt: "asc"}}, } })
     if (clientActivity?.status !== ActivityStatus.IN_PLAN) {
       return new NextResponse("Only activities in a plan can be updated", { status: 403 });
     }

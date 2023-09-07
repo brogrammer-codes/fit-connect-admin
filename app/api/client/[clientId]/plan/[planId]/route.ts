@@ -6,7 +6,7 @@ export async function GET(req: Request, { params }: { params: { clientId: string
   try {
     const { clientId, planId } = params
     // const client = await prismadb.client.findUnique({ where: { id: clientId }, include: {planList: {include: {activityList: true}}} })
-    const clientPlan = await prismadb.plan.findFirst({ where: { clientId, id: planId }, include: { activityList: true } })
+    const clientPlan = await prismadb.plan.findFirst({ where: { clientId, id: planId }, include: { activityList: {orderBy: { createdAt: "asc"}} } })
     if (clientPlan) return NextResponse.json(clientPlan)
     else return new NextResponse("Client Plan Not Found", { status: 404 })
   } catch (error) {
@@ -24,7 +24,7 @@ export async function PATCH(
     const body = await req.json()
     const { note, status } = body;
 
-    const clientPlan = await prismadb.plan.findFirst({ where: { clientId, id: planId }, include:{ activityList: true}})
+    const clientPlan = await prismadb.plan.findFirst({ where: { clientId, id: planId }, include:{ activityList: {orderBy: { createdAt: "asc"}}}})
 
     if (clientPlan?.status !== "ASSIGNED") {
       return new NextResponse("Only Assigned Plans can be updated", { status: 403 });

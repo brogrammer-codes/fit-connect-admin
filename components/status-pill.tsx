@@ -24,9 +24,10 @@ export const StatusPill: React.FC<StatusPillInterface> = ({ status }) => {
       bgColor = "bg-amber-500";
       break;
     case "ASSIGNED":
+      case "IN_PLAN":
       bgColor = "bg-sky-500";
       break;
-    case "IN_PLAN":
+    case "COMPLETE":
       bgColor = "bg-emerald-600";
       break;
     default:
@@ -35,7 +36,7 @@ export const StatusPill: React.FC<StatusPillInterface> = ({ status }) => {
   return (
     <Popover>
       <PopoverTrigger><div className={cn("w-4 h-4 rounded-full", bgColor)} /></PopoverTrigger>
-      <PopoverContent>{status}</PopoverContent>
+      <PopoverContent className="flex w-fit">{status}</PopoverContent>
     </Popover>
 
   );
