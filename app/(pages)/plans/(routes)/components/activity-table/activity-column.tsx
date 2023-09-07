@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ActivityStatus } from "@prisma/client";
 import { StatusPill } from "@/components/status-pill";
 import { ActivityInput } from "./activity-input";
+import { ActivityAction } from "./activity-cell-actions";
 
 export type ActivityColumn = {
   id: string;
@@ -88,11 +89,7 @@ export const columns: ColumnDef<ActivityColumn>[] = [
     id: "controls",
     header: "Controls",
     cell: ({ row }) => (
-      <div className="flex space-x-2" key={row.original.id}>
-        <StatusPill status={row.original.status} />
-        <ActivityInput activityId={row.original.id} inputKey="videoUrl" key={`video-url-${row.original.id}`} />
-        <ActivityInput activityId={row.original.id} inputKey="description" key={`description-${row.original.id}`} />
-      </div>
+      <ActivityAction data={row.original} key={row.original.id}/>
     ),
   },
 ];
