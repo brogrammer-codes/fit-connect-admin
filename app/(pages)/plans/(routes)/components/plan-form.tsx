@@ -26,6 +26,7 @@ import { ActivityTable } from "./activity-table/activity-table";
 import { columns } from "./activity-table/activity-column";
 import { StatusPill } from "@/components/status-pill";
 import { usePlanStore } from "@/hooks/use-plan-store";
+import { PlanFeedback } from "@/components/plan-feedback";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -94,6 +95,12 @@ export const PlanForm: React.FC = ({}) => {
       if (plan.status === PlanStatus.ASSIGNED) {
         messageCopy.title = "Edit Client plan";
         messageCopy.description = "Edit the plan assigned to the client";
+        messageCopy.toastMessage = "Plan Updated";
+        messageCopy.action = "Save Changes";
+      }
+      if (plan.status === PlanStatus.COMPLETE) {
+        messageCopy.title = "Review Completed Plan";
+        messageCopy.description = "A client finished this workout and has completed it.";
         messageCopy.toastMessage = "Plan Updated";
         messageCopy.action = "Save Changes";
       }
