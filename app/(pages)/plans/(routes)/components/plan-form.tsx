@@ -97,6 +97,12 @@ export const PlanForm: React.FC = ({}) => {
         messageCopy.toastMessage = "Plan Updated";
         messageCopy.action = "Save Changes";
       }
+      if (plan.status === PlanStatus.COMPLETE) {
+        messageCopy.title = "Review Completed Plan";
+        messageCopy.description = "A client finished this workout and has completed it.";
+        messageCopy.toastMessage = "Plan Updated";
+        messageCopy.action = "Save Changes";
+      }
     }
   }, [plan, messageCopy]);
 
