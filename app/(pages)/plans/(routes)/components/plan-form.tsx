@@ -26,6 +26,7 @@ import { ActivityTable } from "./activity-table/activity-table";
 import { columns } from "./activity-table/activity-column";
 import { StatusPill } from "@/components/status-pill";
 import { usePlanStore } from "@/hooks/use-plan-store";
+import { PlanFeedback } from "@/components/plan-feedback";
 
 const formSchema = z.object({
   name: z.string().min(1),
