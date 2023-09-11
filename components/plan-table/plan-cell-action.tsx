@@ -35,11 +35,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/plans/${params.planId}`);
-      toast.success("Client deleted.");
+      await axios.delete(`/api/plans/${data.id}`);
+      toast.success("Plan deleted.");
       router.refresh();
     } catch (error) {
-      toast.error("Could not delete client");
+      toast.error("Could not delete plan");
     } finally {
       setDeleteAlertOpen(false);
       setLoading(false);
@@ -54,7 +54,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       );
       router.push(`/plans/${response.data.id}`);
     } catch (error) {
-      toast.error("Could not delete client");
+      toast.error("Could not assign plan to client");
     } finally {
       setDeleteAlertOpen(false);
       setLoading(false);
