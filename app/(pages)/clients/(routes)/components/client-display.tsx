@@ -19,7 +19,7 @@ export const ClientDisplay: React.FC<ClientDisplayInterface> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-2">
         <Heading
           title={`Clients (${clients.length})`}
           description="Your client list, add a new one or edit existing ones here."

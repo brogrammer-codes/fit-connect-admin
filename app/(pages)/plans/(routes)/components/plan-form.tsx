@@ -26,7 +26,7 @@ import { ActivityTable } from "./activity-table/activity-table";
 import { columns } from "./activity-table/activity-column";
 import { StatusPill } from "@/components/status-pill";
 import { usePlanStore } from "@/hooks/use-plan-store";
-import { PlanFeedback } from "@/components/plan-feedback";
+import { useSearchParams } from 'next/navigation'
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -44,9 +44,11 @@ type PlanFormValues = z.infer<typeof formSchema>;
 export const PlanForm: React.FC = ({}) => {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams()
   const { plan, activityList } = usePlanStore();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const newClientId = searchParams.get("clientId")
   // const [activityList, setActivityList] = useState<Activity[] | []>([]);
 
   const messageCopy = useMemo(
@@ -110,12 +112,11 @@ export const PlanForm: React.FC = ({}) => {
   const onSubmit = async (data: PlanFormValues) => {
     try {
       setLoading(true);
-
       if (plan) {
         await axios.patch(`/api/plans/${params.planId}`, data);
         router.refresh();
       } else {
-        const response = await axios.post("/api/plans", data);
+        const response = await axios.post("/api/plans", {...data, clientId: newClientId});
         router.push(`/plans/${response.data.id}`);
       }
       toast.success(messageCopy.toastMessage);
@@ -140,7 +141,8 @@ export const PlanForm: React.FC = ({}) => {
       setOpen(false);
     }
   };
-
+  console.log();
+  
   return (
     <>
       <AlertModal
