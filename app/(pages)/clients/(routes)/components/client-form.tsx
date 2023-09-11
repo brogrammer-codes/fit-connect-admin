@@ -100,6 +100,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
         <Heading title={title} description={description} />
         {initialData && (
           <div className="flex space-x-3">
+            <Button><Link href={`/plans/new?clientId=${initialData.id}`}>Add New Plan</Link></Button>
             <Button size="sm" variant={'link'} onClick={() => window.open(`${clientUrl}/client/${initialData.id}`)}>
             View Client Page  <ExternalLink className="h-5 w-5 pl-1" />
             </Button>

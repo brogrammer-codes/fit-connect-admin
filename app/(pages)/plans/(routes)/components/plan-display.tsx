@@ -18,10 +18,10 @@ export const PlanDisplay: React.FC<PlanDisplayInterface> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-2">
         <Heading
           title={`Plans (${plans.length})`}
-          description="Your client list, add a new one or edit existing ones here."
+          description="Your plan list, add a new one or edit existing ones here. If you created a new plan and it does not show up here try refreshing the page."
         />
 
         <Button onClick={() => router.push(`/plans/new`)}>
