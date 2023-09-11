@@ -22,7 +22,7 @@ export async function GET(req: Request,
         id: planId,
         userId,
       }, include: {
-        activityList: {orderBy: {createdAt: "desc"}}, client: true
+        activityList: { orderBy: { createdAt: "desc" } }, client: true
       }
     });
     if (!planByUserId) {
@@ -56,20 +56,28 @@ export async function DELETE(
       where: {
         id: planId,
         userId,
-      }
+      },
+      include: { activityList: true }
     });
 
     if (!planByUserId) {
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const plan = await prismadb.plan.delete({
-      where: {
-        id: planId,
-      }
-    });
 
-    return NextResponse.json(plan);
+    const activityPromises = planByUserId?.activityList.map(async (activity) => {
+      await prismadb.activity.delete({ where: { id: activity.id } })
+    })
+    await Promise.allSettled(activityPromises).then(async () => {
+      const plan = await prismadb.plan.delete({
+        where: {
+          id: planId,
+        }
+      });
+      return NextResponse.json(plan);
+    })
+
+
   } catch (error) {
     console.log('[PLAN_DELETE]', error);
     return new NextResponse("Internal error", { status: 500 });
