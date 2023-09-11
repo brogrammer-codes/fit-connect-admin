@@ -22,7 +22,7 @@ export async function GET(req: Request,
         id: planId,
         userId,
       }, include: {
-        activityList: {orderBy: {createdAt: "desc"}}, client: true
+        activityList: { orderBy: { createdAt: "desc" } }, client: true
       }
     });
     if (!planByUserId) {
@@ -57,7 +57,7 @@ export async function DELETE(
         id: planId,
         userId,
       },
-      include:{ activityList: true}
+      include: { activityList: true }
     });
 
     if (!planByUserId) {
@@ -65,19 +65,19 @@ export async function DELETE(
     }
 
 
-      const activityPromises = planByUserId?.activityList.map(async (activity) => {
-        await prismadb.activity.delete({where: {id: activity.id}})
-      })
-      await Promise.allSettled(activityPromises).then(async () => {
-        await prismadb.plan.delete({
-          where: {
-            id: planId,
-          }
-        });
-      })
+    const activityPromises = planByUserId?.activityList.map(async (activity) => {
+      await prismadb.activity.delete({ where: { id: activity.id } })
+    })
+    await Promise.allSettled(activityPromises).then(async () => {
+      const plan = await prismadb.plan.delete({
+        where: {
+          id: planId,
+        }
+      });
+      return NextResponse.json(plan);
+    })
 
 
-    return NextResponse.json(planByUserId);
   } catch (error) {
     console.log('[PLAN_DELETE]', error);
     return new NextResponse("Internal error", { status: 500 });
