@@ -134,7 +134,7 @@ export const PlanForm: React.FC = ({}) => {
       router.push("/plans");
       toast.success("Plan deleted.");
     } catch (error: any) {
-      toast.error("Could not delete client");
+      toast.error("Could not delete Plan");
     } finally {
       setLoading(false);
       setOpen(false);

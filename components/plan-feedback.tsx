@@ -20,8 +20,8 @@ export const PlanFeedback: React.FC<PlanWithActivityList> = (props) => {
       >
         <span className=" text-slate-600 text-sm flex">
           Plan: {props.name} - {format(props.updatedAt, "MMMM do, yyyy")}
-          <Link href={`/plans/${props.id}`} className="pl-10">
-            <ExternalLink className="h-6 w-6 pl-1" />{" "}
+          <Link href={`/plans/${props.id}`} className="pl-10 flex items-center hover:underline">
+            View Plan Page <ExternalLink className="h-6 w-6 pl-1" />{" "}
           </Link>
         </span>
 

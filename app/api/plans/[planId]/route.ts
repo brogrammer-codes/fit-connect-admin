@@ -47,7 +47,6 @@ export async function DELETE(
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
     }
-
     if (!planId) {
       return new NextResponse("Plan id is required", { status: 400 });
     }
@@ -68,15 +67,15 @@ export async function DELETE(
     const activityPromises = planByUserId?.activityList.map(async (activity) => {
       await prismadb.activity.delete({ where: { id: activity.id } })
     })
-    await Promise.allSettled(activityPromises).then(async () => {
-      const plan = await prismadb.plan.delete({
+    await Promise.all(activityPromises).then(async () => {
+      await prismadb.plan.delete({
         where: {
           id: planId,
         }
       });
-      return NextResponse.json(plan);
     })
-
+    
+    return NextResponse.json(planByUserId);
 
   } catch (error) {
     console.log('[PLAN_DELETE]', error);
