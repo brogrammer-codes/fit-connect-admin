@@ -10,6 +10,8 @@ import { format } from "date-fns";
 import { Activity, Plan, PlanStatus } from "@prisma/client";
 import Link from "next/link";
 import { PlanFeedback } from "@/components/plan-feedback";
+import { Separator } from "@/components/ui/separator";
+import { Heading } from "@/components/ui/heading";
 
 interface PlanWithActivityList extends Plan {
   activityList: Activity[];
@@ -40,11 +42,18 @@ export const ClientPlanDetails: React.FC<ClientDetailsProps> = ({ plans }) => {
         data={formattedAssignedPlans}
         filterKey="name"
       />
-      <h1 className=" text-2xl font-semibold">Complete Plans</h1>
-
-      {completePlans.map((plan) => (
-        <PlanFeedback {...plan} key={plan.id} />
-      ))}
+      {completePlans.length ? (
+        <div className="flex flex-col space-y-3">
+          <Heading title="Complete Plans" description="These are the clients completed plans, any feedback they provided will also show up here."/>
+          <Separator />
+          {completePlans.map((plan) => (
+            <>
+            <PlanFeedback {...plan} key={plan.id} />
+            <Separator />
+            </>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
