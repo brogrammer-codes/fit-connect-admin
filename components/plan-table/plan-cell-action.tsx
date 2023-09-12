@@ -108,7 +108,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             {data.status === PlanStatus.COMPLETE ? "View" : "Update"}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onPlanCopy}>
-            <CopyIcon className="mr-2 h-4 w-4" /> Clone Plan
+            <CopyIcon className="mr-2 h-4 w-4" /> {data.status === PlanStatus.DRAFT ? "Copy Draft" : "Create Draft Copy"}
           </DropdownMenuItem>
           {data.status === PlanStatus.DRAFT && (
             <DropdownMenuItem onClick={() => setClientModalOpen(true)}>
