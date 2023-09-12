@@ -6,7 +6,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { Book, VideoIcon } from "lucide-react";
 import ActivityPicker from "@/components/activity-picker";
 import { Activity } from "@prisma/client";
@@ -57,12 +56,24 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
       updateActivity(updatedActivityList[index]);
     }
   };
+  const activityInputOnBlur = (activityName: string) => {
+    const updatedActivityList = [...activityList];
+    const index = updatedActivityList.findIndex(
+      (item) => item.id === activityId
+    );
+    if (index !== -1) {
+      updatedActivityList[index]["name"] = activityName;
+      setActivityList([...updatedActivityList]);
+      updateActivity(updatedActivityList[index]);
+    }
+  };
   // TODO: Add activity picker when the input key is name
   if (inputKey === "name") {
     return (
       <ActivityPicker
         currentActivity={activity}
         onActivitySelect={onActivitySelect}
+        onPickerBlur={activityInputOnBlur}
       />
     );
   }
