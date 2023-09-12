@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, DumbbellIcon, PlusCircle, User2 } from "lucide-react";
+import {
+  Check,
+  ChevronsUpDown,
+  DumbbellIcon,
+  PlusCircle,
+  User2,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,12 +37,14 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 interface ActivityPickerProps extends PopoverTriggerProps {
   currentActivity: Activity;
   onActivitySelect: (activity: Activity) => void;
+  onPickerBlur: (activityName: string) => void;
 }
 
 export default function ActivityPicker({
   className,
   onActivitySelect,
   currentActivity,
+  onPickerBlur,
 }: ActivityPickerProps) {
   const [open, setOpen] = React.useState<boolean>(false);
   const [activityDraftList, setActivityDraftList] = React.useState<
@@ -47,16 +55,28 @@ export default function ActivityPicker({
     value: item.id,
   }));
   const onListClick = (id: string) => {
-    const act = activityDraftList.find((activity) => activity.id === id)
-    if(act) {
-      onActivitySelect(act)
+    const act = activityDraftList.find((activity) => activity.id === id);
+    if (act) {
+      onActivitySelect(act);
       setOpen(false);
     }
-  } 
-  const getDraftActivityList = async () => {
-    const {data} = await axios.get('/api/activities')
-    if(data) setActivityDraftList([...data])
+  };
+  const onInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === 'Enter') {
+      onPickerBlur(event.currentTarget.value);
+      setOpen(false);
+    }
   }
+  const onInputBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    if(event.target.value.length > 0) {
+      onPickerBlur(event.target.value)
+      setOpen(false);
+    }
+  }
+  const getDraftActivityList = async () => {
+    const { data } = await axios.get("/api/activities");
+    if (data) setActivityDraftList([...data]);
+  };
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -76,14 +96,18 @@ export default function ActivityPicker({
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandList>
-            <CommandInput placeholder="Search activities..." onFocus={getDraftActivityList}/>
+            <CommandInput
+              placeholder="Search activities..."
+              onFocus={getDraftActivityList}
+              onBlur={onInputBlur}
+              onKeyDown={onInputKeyDown}
+            />
             <CommandEmpty>Activity</CommandEmpty>
             <CommandGroup heading="Activities">
               {formattedItems.map((activity) => (
                 <CommandItem
                   key={activity.value}
                   onSelect={() => {
-                    
                     onListClick(activity.value);
                   }}
                   className="text-sm"

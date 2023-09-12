@@ -57,12 +57,24 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
       updateActivity(updatedActivityList[index]);
     }
   };
+  const activityInputOnBlur = (activityName: string) => {
+    const updatedActivityList = [...activityList];
+    const index = updatedActivityList.findIndex(
+      (item) => item.id === activityId
+    );
+    if (index !== -1) {
+      updatedActivityList[index]["name"] = activityName;
+      setActivityList([...updatedActivityList]);
+      updateActivity(updatedActivityList[index]);
+    }
+  };
   // TODO: Add activity picker when the input key is name
   if (inputKey === "name") {
     return (
       <ActivityPicker
         currentActivity={activity}
         onActivitySelect={onActivitySelect}
+        onPickerBlur={activityInputOnBlur}
       />
     );
   }
