@@ -2,11 +2,8 @@
 
 import * as React from "react";
 import {
-  Check,
   ChevronsUpDown,
   DumbbellIcon,
-  PlusCircle,
-  User2,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -25,9 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useParams } from "next/navigation";
 import { Activity } from "@prisma/client";
-import prismadb from "@/lib/prismadb";
 import axios from "axios";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<

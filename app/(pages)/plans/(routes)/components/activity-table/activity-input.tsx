@@ -6,7 +6,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { Book, VideoIcon } from "lucide-react";
 import ActivityPicker from "@/components/activity-picker";
 import { Activity } from "@prisma/client";
