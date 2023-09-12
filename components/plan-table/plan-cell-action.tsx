@@ -2,7 +2,14 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { Copy, Edit, MoreHorizontal, Trash, User2 } from "lucide-react";
+import {
+  Copy,
+  CopyIcon,
+  Edit,
+  MoreHorizontal,
+  Trash,
+  User2,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 
@@ -60,7 +67,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       setLoading(false);
     }
   };
+  const onPlanCopy =async () => {
+    try {
+      setLoading(true)
+      const response = await axios.post(`/api/plans/${data.id}/clone`)
+      router.push(`/plans/${response.data.id}`);
 
+    } catch (error) {
+      toast.error("Could not clone plan");
+    }finally {
+      setLoading(false);
+    }
+  }
   return (
     <>
       <AlertModal
@@ -84,10 +102,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          
-            <DropdownMenuItem onClick={() => router.push(`/plans/${data.id}`)}>
-              <Edit className="mr-2 h-4 w-4" /> {data.status === PlanStatus.COMPLETE ? "View" : "Update"}
-            </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={() => router.push(`/plans/${data.id}`)}>
+            <Edit className="mr-2 h-4 w-4" />{" "}
+            {data.status === PlanStatus.COMPLETE ? "View" : "Update"}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onPlanCopy}>
+            <CopyIcon className="mr-2 h-4 w-4" /> Clone Plan
+          </DropdownMenuItem>
           {data.status === PlanStatus.DRAFT && (
             <DropdownMenuItem onClick={() => setClientModalOpen(true)}>
               <User2 className="mr-2 h-4 w-4 text-green-800" /> Assign to Client
