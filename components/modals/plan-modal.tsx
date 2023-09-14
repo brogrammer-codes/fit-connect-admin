@@ -54,13 +54,13 @@ export const PlanModal: React.FC<PlanModalProps> = ({
     >
       <div className="pt-6 space-y-2 flex flex-col items-center justify-end w-full">
         <PlanPicker items={planList} currentPlan={plan} onPlanSelect={onPlanSelect} />
-        {plan ? <div> Do you want to assign this to {plan.name}?</div> : null}
+        {plan ? <div> Do you want to <span className=" font-sans">{plan.name}</span> to {clientName} ?</div> : null}
       </div>
       <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-        {plan ? (<Button disabled={loading} variant="outline" onClick={() => { onClose(); onConfirm(plan.id) }}>
+        {plan ? (<Button disabled={loading} variant="default" onClick={() => { onClose(); onConfirm(plan.id) }}>
           Assign
         </Button>) : null}
-        <Button><Link href={`/plans/new?clientId=${clientId}`}>Add New Plan</Link></Button>
+        <Button variant="secondary"><Link href={`/plans/new?clientId=${clientId}`}>Add New Plan</Link></Button>
         <Button disabled={loading} variant="outline" onClick={onClose}>
           Cancel
         </Button>
