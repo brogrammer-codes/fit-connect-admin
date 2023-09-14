@@ -72,12 +72,12 @@ export const PlanForm: React.FC = ({}) => {
     defaultValues: plan || {
       name: "",
       description: "",
-      tag_1: "",
-      tag_2: "",
-      tag_3: "",
-      tag_4: "",
-      tag_5: "",
-      tag_6: "",
+      tag_1: "Weight",
+      tag_2: "Reps",
+      tag_3: "Sets",
+      tag_4: "Time",
+      tag_5: "Intensity",
+      tag_6: "Rest",
     },
   });
   useEffect(() => {
@@ -217,6 +217,12 @@ export const PlanForm: React.FC = ({}) => {
               )}
             />
           </div>
+          <div className="flex flex-col">
+
+          <span className=" text-xl font-semibold">Plan Tags</span>
+          <span className=" text-sm text-slate-700">Variables used for your workout plan, they are set to the default tags but feel free to update them.</span>
+          </div>
+          <Separator />
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
