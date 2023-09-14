@@ -18,24 +18,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Client } from "@prisma/client";
+import { Plan } from "@prisma/client";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
-interface ClientSwitcherProps extends PopoverTriggerProps {
-  items: Client[];
-  currentClient: Client | null;
-  onClientSelect: (id: string) => void
+interface PlanSwitcherProps extends PopoverTriggerProps {
+  items: Plan[];
+  currentPlan: Plan | null;
+  onPlanSelect: (id: string) => void
 }
 
-export default function ClientPicker({
+export default function PlanPicker({
   className,
   items = [],
-  currentClient,
-  onClientSelect
-}: ClientSwitcherProps) {
+  currentPlan,
+  onPlanSelect
+}: PlanSwitcherProps) {
 
   const formattedItems = items.map((item) => ({
     label: item.name,
@@ -48,35 +48,35 @@ export default function ClientPicker({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild >
         <Button
           variant="outline"
           size="sm"
           role="combobox"
           aria-expanded={open}
-          aria-label="Select a client"
-          className={cn("w-[200px] justify-between", className)}
+          aria-label="Select a plan"
+          className={cn(" justify-between w-full", className)}
         >
           <User2 className="mr-2 h-4 w-4" />
-          {currentClient?.name}
+          {currentPlan?.name}
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0">
         <Command>
           <CommandList>
-            <CommandInput placeholder="Search clients..." />
-            <CommandEmpty>Client</CommandEmpty>
-            <CommandGroup heading="Clients">
-              {formattedItems.map((client) => (
+            <CommandInput placeholder="Search plan..." />
+            <CommandEmpty>Plan</CommandEmpty>
+            <CommandGroup heading="Plans">
+              {formattedItems.map((plan) => (
                 <CommandItem
-                  key={client.value}
-                  onSelect={() => { setOpen(false); onClientSelect(client.value) }}
+                  key={plan.value}
+                  onSelect={() => { setOpen(false); onPlanSelect(plan.value) }}
                   className="text-sm"
                 >
                   <User2 className="mr-2 h-4 w-4" />
-                  {client.label}
-                  {currentClient?.id === client.value && (
+                  {plan.label}
+                  {currentPlan?.id === plan.value && (
                     <Check className={cn("ml-auto h-4 w-4 opacity-100")} />
                   )}
                 </CommandItem>

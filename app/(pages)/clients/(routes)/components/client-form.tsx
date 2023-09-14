@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ExternalLink, Trash } from "lucide-react";
 import { AlertModal } from "@/components/modals/alert-modal";
 import Link from "next/link";
+import { PlanModal } from "@/components/modals/plan-modal";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -40,7 +41,8 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [planModalOpen, setPlanModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const title = initialData ? "Edit client" : "Create client";
   const description = initialData ? "Edit a client." : "Add a new client";
@@ -73,7 +75,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
       setLoading(false);
     }
   };
-  const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || ''
+  const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || "";
   const onDelete = async () => {
     try {
       setLoading(true);
@@ -85,30 +87,56 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
       toast.error("Could not delete client");
     } finally {
       setLoading(false);
-      setOpen(false);
+      setDeleteOpen(false);
+    }
+  };
+  const onClientConfirm = async (planId: string) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `/api/clients/${initialData?.id}/assign/${planId}`
+      );
+      router.push(`/plans/${response.data.id}`);
+    } catch (error) {
+      toast.error("Could not assign plan to client");
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <>
       <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
+        isOpen={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
         onConfirm={onDelete}
         loading={loading}
+      />
+      <PlanModal
+        isOpen={planModalOpen}
+        onClose={() => setPlanModalOpen(false)}
+        onConfirm={onClientConfirm}
+        clientId={initialData?.id || ''}
+        clientName={initialData?.name || ''}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <div className="flex space-x-3">
-            <Button><Link href={`/plans/new?clientId=${initialData.id}`}>Add New Plan</Link></Button>
-            <Button size="sm" variant={'link'} onClick={() => window.open(`${clientUrl}/client/${initialData.id}`)}>
-            View Client Page  <ExternalLink className="h-5 w-5 pl-1" />
+            <Button onClick={() => setPlanModalOpen(true)}>Assign Plan</Button>
+            <Button
+              size="sm"
+              variant={"link"}
+              onClick={() =>
+                window.open(`${clientUrl}/client/${initialData.id}`)
+              }
+            >
+              View Client Page <ExternalLink className="h-5 w-5 pl-1" />
             </Button>
             <Button
               disabled={loading}
               variant="destructive"
               size="sm"
-              onClick={() => setOpen(true)}
+              onClick={() => setDeleteOpen(true)}
             >
               <Trash className="h-4 w-4" />
             </Button>
