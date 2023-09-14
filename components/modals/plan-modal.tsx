@@ -7,18 +7,23 @@ import { Button } from "@/components/ui/button";
 import { Plan } from "@prisma/client";
 import PlanPicker from "../plan-picker";
 import axios from "axios";
+import Link from "next/link";
 
 interface PlanModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (planId: string) => void;
-  loading: boolean;
+  clientId: string;
+  clientName: string;
+  loading?: boolean;
 }
 
 export const PlanModal: React.FC<PlanModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
+  clientId,
+  clientName,
   loading,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
@@ -40,11 +45,10 @@ export const PlanModal: React.FC<PlanModalProps> = ({
     if (selectedPlan) setPlan(selectedPlan)
   }
 
-
   return (
     <Modal
-      title="Assign this Plan to a Plan?"
-      description="This will be added to the end of the plans the plan has."
+      title={`Assign a plan to ${clientName}`}
+      description="Pick a plan to assign to your client, it will get added to the end of their queue."
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -56,6 +60,7 @@ export const PlanModal: React.FC<PlanModalProps> = ({
         {plan ? (<Button disabled={loading} variant="outline" onClick={() => { onClose(); onConfirm(plan.id) }}>
           Assign
         </Button>) : null}
+        <Button><Link href={`/plans/new?clientId=${clientId}`}>Add New Plan</Link></Button>
         <Button disabled={loading} variant="outline" onClick={onClose}>
           Cancel
         </Button>

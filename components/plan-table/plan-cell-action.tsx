@@ -63,7 +63,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     } catch (error) {
       toast.error("Could not assign plan to client");
     } finally {
-      setDeleteAlertOpen(false);
       setLoading(false);
     }
   };

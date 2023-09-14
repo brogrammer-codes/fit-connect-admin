@@ -48,21 +48,21 @@ export default function PlanPicker({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild >
         <Button
           variant="outline"
           size="sm"
           role="combobox"
           aria-expanded={open}
           aria-label="Select a plan"
-          className={cn("w-[200px] justify-between", className)}
+          className={cn(" justify-between w-full", className)}
         >
           <User2 className="mr-2 h-4 w-4" />
           {currentPlan?.name}
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0">
         <Command>
           <CommandList>
             <CommandInput placeholder="Search plan..." />
