@@ -24,7 +24,7 @@ export const ActivityDisplay: React.FC<ActivityDisplayInterface> = ({
   }
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-2">
         <Heading
           title={`Activities (${activityList.length})`}
           description="These are a list of your activities. "
