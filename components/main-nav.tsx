@@ -3,12 +3,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-export function MainNav({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
+export const MainNav: React.FC<{ onClickCallback?: () => void }> = ({ onClickCallback }) => {
   const pathname = usePathname();
-  const params = useParams();
   const routes = [
     {
       href: `/dashboard`,
@@ -32,7 +28,7 @@ export function MainNav({
     },
   ];
   return (
-    <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
+    <nav className={cn("flex items-center gap-4 md:flex-row flex-col")}>
       {routes.map((route) => (
         <Link
           key={route.href}
@@ -43,6 +39,7 @@ export function MainNav({
               ? "text-neutral-800"
               : "text-stone-300 text-muted-foreground"
           )}
+          onClick={() => onClickCallback && onClickCallback()}
         >
           {route.label}
         </Link>
