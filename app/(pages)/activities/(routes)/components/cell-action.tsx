@@ -17,6 +17,8 @@ import {
 import { AlertModal } from "@/components/modals/alert-modal";
 
 import { ActivityColumn } from "./columns";
+import { useActivityStore } from "@/hooks/use-activity-store";
+import { Activity } from "@prisma/client";
 
 interface CellActionProps {
   data: ActivityColumn;
@@ -24,7 +26,7 @@ interface CellActionProps {
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
-  const params = useParams();
+  const {setActivity, setActivityModalOpen} = useActivityStore();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +48,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     navigator.clipboard.writeText(id);
     toast.success("Activity video URL copied to clipboard.");
   };
-
+  const onOpenModal = () => {
+    setActivity(data as unknown as Activity)
+    setActivityModalOpen(true)
+  }
   return (
     <>
       <AlertModal
@@ -67,7 +72,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           {data.videoUrl.length ? (<DropdownMenuItem onClick={() => onCopy(data.videoUrl)}>
             <Video className="mr-2 h-4 w-4" /> Copy URL
           </DropdownMenuItem>) : null}
-          <DropdownMenuItem onClick={() => router.push(`/activities/${data.id}`)}>
+          <DropdownMenuItem onClick={onOpenModal}>
             <Edit className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>

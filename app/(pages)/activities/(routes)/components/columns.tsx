@@ -10,6 +10,7 @@ export type ActivityColumn = {
   name: string;
   createdAt: string;
   videoUrl: string;
+  description: string;
 };
 
 export const columns: ColumnDef<ActivityColumn>[] = [
