@@ -23,7 +23,7 @@ const Navbar: React.FC<{ signedIn: boolean }> = ({ signedIn }) => {
           </Button>
         ) : (
           <SignInButton>
-            <button className="flex px-3 py-1 bg-slate-500 rounded font-semibold text-slate-200  ml-auto">
+            <button className="md:hidden flex px-3 py-1 bg-slate-500 rounded font-semibold text-slate-200  ml-auto">
               Sign-In/Create
             </button>
           </SignInButton>
