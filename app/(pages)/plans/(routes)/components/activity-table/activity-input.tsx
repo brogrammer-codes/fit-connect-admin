@@ -10,6 +10,7 @@ import { Book, VideoIcon } from "lucide-react";
 import ActivityPicker from "@/components/activity-picker";
 import { Activity } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
+import { useActivityHook } from "@/hooks/use-activity-hook";
 
 type ActivityInputKeys = "name" | "videoUrl" | "description" | "tag_1" | "tag_2"| "tag_3"| "tag_4"| "tag_5"| "tag_6";
 
@@ -22,15 +23,17 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
   activityId,
 }) => {
   const { setActivityList, activityList } = usePlanStore();
+  const {updateActivity} = useActivityHook()
   const activity = activityList.find((act) => act.id === activityId);
   if (!activity) return null;
-  const updateActivity = async (newActivity?: Activity) => {
-    try {
-      await axios.patch(
-        `/api/activities/${activityId}`,
-        newActivity || activity
-      );
-    } catch (error) {}
+  const updateActivityOnBlur = async () => {
+    updateActivity(activity, activity.id)
+    // try {
+    //   await axios.patch(
+    //     `/api/activities/${activityId}`,
+    //     newActivity || activity
+    //   );
+    // } catch (error) {}
   };
   const onInputChange = (value: string) => {
     const updatedActivityList = [...activityList];
@@ -53,7 +56,8 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
       updatedActivityList[index]["description"] = updatedAct.description;
       updatedActivityList[index]["videoUrl"] = updatedAct.videoUrl;
       setActivityList([...updatedActivityList]);
-      updateActivity(updatedActivityList[index]);
+      const updatedActivity = updatedActivityList[index]
+      updateActivity(updatedActivity, updatedActivity.id);
     }
   };
   const activityInputOnBlur = (activityName: string) => {
@@ -64,10 +68,10 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
     if (index !== -1) {
       updatedActivityList[index]["name"] = activityName;
       setActivityList([...updatedActivityList]);
-      updateActivity(updatedActivityList[index]);
+      const updatedActivity = updatedActivityList[index]
+      updateActivity(updatedActivity, updatedActivity.id);
     }
   };
-  // TODO: Add activity picker when the input key is name
   if (inputKey === "name") {
     return (
       <ActivityPicker
@@ -90,7 +94,7 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
           <Input
             value={activity[inputKey]}
             onChange={({ target: { value } }) => onInputChange(value)}
-            onBlur={() => updateActivity()}
+            onBlur={() => updateActivityOnBlur()}
           />
         </PopoverContent>
       </Popover>
@@ -109,7 +113,7 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
           <Textarea
             value={activity[inputKey]}
             onChange={({ target: { value } }) => onInputChange(value)}
-            onBlur={() => updateActivity()}
+            onBlur={() => updateActivityOnBlur()}
           />
         </PopoverContent>
       </Popover>
@@ -119,7 +123,7 @@ export const ActivityInput: React.FC<ActivityInputInterface> = ({
     <Input
       value={activity[inputKey]}
       onChange={({ target: { value } }) => onInputChange(value)}
-      onBlur={() => updateActivity()}
+      onBlur={() => updateActivityOnBlur()}
     />
   );
 };

@@ -2,22 +2,18 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { Copy, Edit, MoreHorizontal, Trash, User2 } from "lucide-react";
+import { MoreHorizontal, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { ClientModal } from "@/components/modals/client-modal";
-import { PlanStatus } from "@prisma/client";
 import { ActivityColumn } from "./activity-column";
 import { StatusPill } from "@/components/status-pill";
 import { ActivityInput } from "./activity-input";
@@ -34,9 +30,7 @@ export const ActivityAction: React.FC<ActivityActionProps> = ({ data }) => {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/activities/${data.id}`
-      );
+      await axios.delete(`/api/activities/${data.id}`);
       toast.success("Activity deleted.");
       router.refresh();
     } catch (error) {
@@ -58,14 +52,29 @@ export const ActivityAction: React.FC<ActivityActionProps> = ({ data }) => {
       <StatusPill status={data.status} />
       <ActivityInput activityId={data.id} inputKey="videoUrl" />
       <ActivityInput activityId={data.id} inputKey="description" />
-      <Button
-        variant={"destructive"}
-        size={"icon"}
-        onClick={() => setDeleteAlertOpen(true)}
-      >
-        <Trash className="h-4 w-4" />
-      </Button>
+      <Popover>
+        <PopoverTrigger>
+          <MoreHorizontal />
+        </PopoverTrigger>
+        <PopoverContent className="flex flex-row space-x-2 p-3 w-fit">
+          {
+            data.type !== "ACTIVITY" ? (<Button size={'sm'}>Convert to Activity</Button>) : null
+          }
+          {
+            data.type !== "HEADING" ? (<Button size={"sm"}>Convert to Heading</Button>) : null
+          }
+          {
+            data.type !== "SUPERSET" ? (<Button size={"sm"}>Convert to Superset</Button>) : null
+          }
+          <Button
+            variant={"destructive"}
+            size={"icon"}
+            onClick={() => setDeleteAlertOpen(true)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+        </PopoverContent>
+      </Popover>
     </div>
   );
-  
 };

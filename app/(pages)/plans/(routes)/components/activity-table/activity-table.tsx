@@ -33,10 +33,7 @@ export function ActivityTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  const onRowChange = (id: string, value: string) => {
-    console.log(id, value);
-    
-  }
+
   return (
     <div>
       <div className="rounded-md border">

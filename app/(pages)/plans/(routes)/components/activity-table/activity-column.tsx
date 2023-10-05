@@ -12,6 +12,7 @@ export type ActivityColumn = {
   status: ActivityStatus;
   description: string;
   videoUrl: string;
+  type: string;
 };
 
 export const columns: ColumnDef<ActivityColumn>[] = [
