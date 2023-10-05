@@ -17,6 +17,12 @@ enum PlanStatus {
   COMPLETE
 }
 
+enum ActivityType {
+  ACTIVITY
+  HEADING
+  SUPERSET
+}
+
 enum ActivityStatus {
   DRAFT
   IN_PLAN
@@ -53,6 +59,7 @@ model Activity {
   parentActivity    Activity?      @relation("ChildActivity", fields: [parentActivityId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   childActivityList Activity[]     @relation("ChildActivity")
   note              String?
+  type              ActivityType   @default(ACTIVITY)
   status            ActivityStatus @default(DRAFT)
   videoUrl          String
   createdAt         DateTime       @default(now())
