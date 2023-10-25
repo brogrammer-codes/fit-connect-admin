@@ -34,7 +34,7 @@ export async function POST(req: Request, { params }: { params: { planId: string 
         status: PlanStatus.DRAFT
       }
     })
-    planByUser.activityList.map(async (activity) => {
+    const activityPromises = planByUser.activityList.map(async (activity) => {
       await prismadb.activity.create({
         data: {
           name: activity.name,
@@ -52,6 +52,7 @@ export async function POST(req: Request, { params }: { params: { planId: string 
         }
       })
     })
+    await Promise.all(activityPromises);
     return NextResponse.json(plan)
   } catch (error) {
     console.log('[PLAN_CLONE_POST]', error)

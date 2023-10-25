@@ -26,7 +26,7 @@ export async function POST(
     }
     const { name, description, tag_1, tag_2, tag_3, tag_4, tag_5, tag_6 } = planByUser
     const plan = await prismadb.plan.create({ data: { name, description, userId, clientId, status: "ASSIGNED", tag_1, tag_2, tag_3, tag_4, tag_5, tag_6 } })    
-    planByUser.activityList.map(async (activity) => {
+    const activityPromises = planByUser.activityList.map(async (activity) => {
       await prismadb.activity.create({
         data: {
           name: activity.name,
@@ -44,6 +44,7 @@ export async function POST(
         }
       })
     })
+    await Promise.all(activityPromises);
     return NextResponse.json(plan);
   } catch (error) {
     console.log('[CLIENT_PATCH]', error);

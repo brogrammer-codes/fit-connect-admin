@@ -7,17 +7,9 @@ import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/modals/alert-modal";
 
-import { ClientModal } from "@/components/modals/client-modal";
-import { PlanStatus } from "@prisma/client";
+
 import { ActivityColumn } from "./activity-column";
 import { StatusPill } from "@/components/status-pill";
 import { ActivityInput } from "./activity-input";

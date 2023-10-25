@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Client } from "@prisma/client";
 import ClientPicker from "../client-picker";
 import axios from "axios";
+import { Label } from "../ui/label";
 
 interface ClientModalProps {
   isOpen: boolean;
@@ -49,11 +50,11 @@ export const ClientModal: React.FC<ClientModalProps> = ({
       onClose={onClose}
     >
       <div className="pt-6 space-y-2 flex flex-col items-center justify-end w-full">
-        <ClientPicker items={clientList} currentClient={client} onClientSelect={onClientSelect} />
+        {(loading && client) ? (<Label>Assigning plan to {client.name}</Label>) : (<ClientPicker items={clientList} currentClient={client} onClientSelect={onClientSelect} />)}
         {client ? <div> Do you want to assign this to {client.name}?</div> : null}
       </div>
       <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-        {client ? (<Button disabled={loading} variant="outline" onClick={() => { onClose(); onConfirm(client.id) }}>
+        {client ? (<Button disabled={loading} variant="outline" onClick={() => { onConfirm(client.id) }}>
           Assign
         </Button>) : null}
         <Button disabled={loading} variant="outline" onClick={onClose}>
